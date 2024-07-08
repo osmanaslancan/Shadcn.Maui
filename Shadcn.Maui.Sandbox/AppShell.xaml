@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="Shadcn.Maui.Sandbox.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Shadcn.Maui.Sandbox"
+    Shell.FlyoutBehavior="Disabled"
+    Title="Shadcn.Maui.Sandbox">
+
+    <ShellContent
+        NavigationPage.HasNavigationBar="False"
+        Title="Home"
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Route="MainPage" />
+
+</Shell>

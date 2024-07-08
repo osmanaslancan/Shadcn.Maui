@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource DarkBackground}"
+             xmlns:shadcn="clr-namespace:Shadcn.Maui.Controls;assembly=Shadcn.Maui"
+             x:Class="Shadcn.Maui.Sandbox.MainPage">
+    <ScrollView>
+        <HorizontalStackLayout Spacing="10" HorizontalOptions="Center" VerticalOptions="Center">
+            <VerticalStackLayout Spacing="10" HorizontalOptions="Center" VerticalOptions="Center">
+                <shadcn:SButton Variant="Primary" Text="Button"/>
+                <shadcn:SButton Variant="Secondary" Text="Secondary"/>
+                <shadcn:SButton Variant="Destructive" Text="Destructive"/>
+                <shadcn:SButton Variant="Outline" Text="Outline"/>
+                <shadcn:SButton Variant="Ghost" Text="Ghost"/>
+            </VerticalStackLayout>
+            <shadcn:SCard>
+                <shadcn:SCardHeader>
+                    <shadcn:SCardTitle>
+                        <Label>Create project</Label>
+                    </shadcn:SCardTitle>
+                    <shadcn:SCardDescription>
+                        <Label>Deploy your new project in one-click.</Label>
+                    </shadcn:SCardDescription>
+                </shadcn:SCardHeader>
+                <VerticalStackLayout Padding="24,0,24,24">
+                    <Label Text="Name"/>
+                    <Entry Placeholder="Name of your project"/>
+                    <Label Text="Framework"/>
+                    <Entry/>
+                </VerticalStackLayout>
+                <shadcn:SCardFooter Direction="Row" JustifyContent="SpaceBetween">
+                    <shadcn:SButton Variant="Outline" Text="Cancel"/>
+                    <shadcn:SButton Variant="Primary" Text="Deploy"/>
+                </shadcn:SCardFooter>
+            </shadcn:SCard>
+        </HorizontalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+              x:Class="Shadcn.Maui.Resources.Colors">
+    <Color x:Key="Background">#FFFFFF</Color>
+    <Color x:Key="Foreground">#0B0C33</Color>
+    <Color x:Key="Card">#FFFFFF</Color>
+    <Color x:Key="CardForeground">#0B0C33</Color>
+    <Color x:Key="Popover">#FFFFFF</Color>
+    <Color x:Key="PopoverForeground">#0B0C33</Color>
+    <Color x:Key="Primary">#1C2436</Color>
+    <Color x:Key="PrimaryForeground">#F8F8FF</Color>
+    <Color x:Key="Secondary">#E3EAF0</Color>
+    <Color x:Key="SecondaryForeground">#1C2436</Color>
+    <Color x:Key="Muted">#E3EAF0</Color>
+    <Color x:Key="MutedForeground">#7D8186</Color>
+    <Color x:Key="Accent">#E3EAF0</Color>
+    <Color x:Key="AccentForeground">#1C2436</Color>
+    <Color x:Key="Destructive">#E53E3E</Color>
+    <Color x:Key="DestructiveForeground">#F8F8FF</Color>
+    <Color x:Key="Border">#C4CDD7</Color>
+    <Color x:Key="Input">#C4CDD7</Color>
+    <Color x:Key="Ring">#0B0C33</Color>
+    <Color x:Key="DarkBackground">#090909</Color>
+    <Color x:Key="DarkForeground">#FAFAFA</Color>
+    <Color x:Key="DarkCard">#090909</Color>
+    <Color x:Key="DarkCardForeground">#FAFAFA</Color>
+    <Color x:Key="DarkPopover">#090909</Color>
+    <Color x:Key="DarkPopoverForeground">#FAFAFA</Color>
+    <Color x:Key="DarkPrimary">#FAFAFA</Color>
+    <Color x:Key="DarkPrimaryForeground">#191919</Color>
+    <Color x:Key="DarkSecondary">#282828</Color>
+    <Color x:Key="DarkSecondaryForeground">#FAFAFA</Color>
+    <Color x:Key="DarkMuted">#282828</Color>
+    <Color x:Key="DarkMutedForeground">#A3A3A3</Color>
+    <Color x:Key="DarkAccent">#282828</Color>
+    <Color x:Key="DarkAccentForeground">#FAFAFA</Color>
+    <Color x:Key="DarkDestructive">#992B2B</Color>
+    <Color x:Key="DarkDestructiveForeground">#FFEDED</Color>
+    <Color x:Key="DarkBorder">#282828</Color>
+    <Color x:Key="DarkInput">#282828</Color>
+    <Color x:Key="DarkRing">#DADADA</Color>
+    
+    <Thickness x:Key="Radius">8</Thickness>
+    <!--<Color x:Key="Primary90">Red</Color>-->
+</ResourceDictionary>

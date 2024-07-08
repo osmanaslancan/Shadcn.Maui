@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "Shadcn.Maui.SourceGen": {
+      "commandName": "Project"
+    },
+    "Profile 1": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "..\\Shadcn.Maui.Controls\\Shadcn.Maui.csproj"
+    }
+  }
+}
