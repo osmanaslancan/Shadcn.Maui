@@ -1,17 +1,17 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
-using System.Dynamic;
-using System.Reflection;
 using System.Text;
-using System.Xml.Linq;
 
 namespace Shadcn.Maui.SourceGen;
 
 [Generator]
 class WrapperSourceGenerator : IIncrementalGenerator
 {
-    private record BindableProperty(IFieldSymbol Field, IMethodSymbol? TargetType);
+    private record BindableProperty(IFieldSymbol Field, IMethodSymbol? TargetType)
+    {
+        public string GetPropertyName() => RemovePropertyPostfix(Field.Name);
+    };
     private record Model(string Name, string Namespace, INamedTypeSymbol targetType, List<BindableProperty> fieldsToGenerate, List<BindableProperty> existingFields);
 
     private static string RemovePropertyPostfix(string name)
@@ -97,9 +97,9 @@ class WrapperSourceGenerator : IIncrementalGenerator
 
             var type = bindableProperty.TargetType!.ReturnType.ToString();
 
-            sb.AppendLine($@"public {(existingField is not null ? "new" : "")}static readonly BindableProperty {field.Name} = BindableProperty.Create(""{field.Name.Substring(0, field.Name.Length - "Property".Length)}"", typeof({type}), typeof({model.Name}), default({type}), defaultBindingMode: BindingMode.TwoWay);");
+            sb.AppendLine($@"public {(existingField is not null ? "new" : "")}static readonly BindableProperty {field.Name} = BindableProperty.Create(""{bindableProperty.GetPropertyName()}"", typeof({type}), typeof({model.Name}), default({type}), defaultBindingMode: BindingMode.TwoWay);");
             sb.AppendLine($$"""
-            public {{type}} {{field.Name.Substring(0, field.Name.Length - "Property".Length)}} 
+            public {{type}} {{bindableProperty.GetPropertyName()}} 
             {
                 get => ({{type}})GetValue({{field.Name}});
                 set => SetValue({{field.Name}}, value); 
@@ -125,7 +125,7 @@ class WrapperSourceGenerator : IIncrementalGenerator
                 continue;
             }
 
-            sb.AppendLine($@"wrapped.Bind({model.targetType}.{field.Name}, ""{field.Name.Substring(0, field.Name.Length - "Property".Length)}"", source: this, mode: BindingMode.TwoWay);");
+            sb.AppendLine($@"wrapped.Bind({model.targetType}.{field.Name}, ""{bindableProperty.GetPropertyName()}"", source: this, mode: BindingMode.TwoWay);");
         }
         sb.AppendLine("}");
         return sb.ToString();

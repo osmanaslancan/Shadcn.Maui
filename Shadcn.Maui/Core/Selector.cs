@@ -1,9 +1,38 @@
-﻿namespace Shadcn.Maui.Core;
+﻿using System;
+using System.ComponentModel;
+
+namespace Shadcn.Maui.Core;
 
 abstract class Selector
 {
     Selector()
     {
+    }
+
+    public abstract void Bind(VisualElement styleable, Action action);
+    public abstract void UnBind(VisualElement styleable);
+
+    protected Dictionary<Guid, PropertyChangedEventHandler> _changeHandlers = new();
+
+    protected void BindToProperty(VisualElement styleable, Action action, string propertyName)
+    {
+        if (_changeHandlers.ContainsKey(styleable.Id))
+            throw new InvalidOperationException("Already bound to this styleable");
+
+        styleable.PropertyChanged += _changeHandlers[styleable.Id] = (s, e) =>
+        {
+            if (e.PropertyName == propertyName)
+                action();
+        };
+    }
+
+    protected void UnBindPropertyListener(VisualElement styleable)
+    {
+        if (_changeHandlers.TryGetValue(styleable.Id, out var handler))
+        {
+            styleable.PropertyChanged -= handler;
+            _changeHandlers.Remove(styleable.Id);
+        }
     }
 
     private static string[] GetNameAndBases(VisualElement element)
@@ -25,6 +54,7 @@ abstract class Selector
         Action<Operator, Selector> setCurrentSelector = (op, sel) => SetCurrentSelector(ref root, ref workingRoot, ref workingRootParent, op, sel);
 
         int p;
+        char c;
         while ((p = reader.Peek()) > 0)
         {
             switch (unchecked((char)p))
@@ -76,6 +106,15 @@ abstract class Selector
                         return Invalid;
                     setCurrentSelector(new And(), new Base(element));
                     break;
+                //case ':':
+                //    reader.Read();
+                //    var property = reader.ReadIdent();
+
+                //    if (property == null)
+                //        return Invalid;
+
+                //    setCurrentSelector(new And(), new ElementPropertyChecker(property));
+                //    break;
                 case ' ':
                 case '\t':
                 case '\n':
@@ -85,7 +124,7 @@ abstract class Selector
                     bool processWs = false;
                     while ((p = reader.Peek()) > 0)
                     {
-                        var c = unchecked((char)p);
+                        c = unchecked((char)p);
                         if (char.IsWhiteSpace(c))
                         {
                             reader.Read();
@@ -110,6 +149,19 @@ abstract class Selector
                     var elementName = reader.ReadIdent();
                     if (elementName == null)
                         return Invalid;
+                    p = reader.Peek();
+                    c = unchecked((char)p);
+                    if (c == ':')
+                    {
+                        reader.Read();
+                        var propertyName = reader.ReadIdent();
+                        if (propertyName == null)
+                            return Invalid;
+
+                        setCurrentSelector(new And(), new ElementPropertyChecker(propertyName));
+                    }
+
+
                     setCurrentSelector(new And(), new SelectableElement(elementName));
                     break;
             }
@@ -161,6 +213,8 @@ abstract class Selector
         }
 
         public override bool Matches(VisualElement styleable) => func(styleable);
+        public override void Bind(VisualElement styleable, Action action) { }
+        public override void UnBind(VisualElement styleable) { }
     }
 
     sealed class Class : UnarySelector
@@ -173,6 +227,15 @@ abstract class Selector
         public string ClassName { get; }
         public override bool Matches(VisualElement styleable)
             => styleable.StyleClass != null && styleable.StyleClass.Contains(ClassName);
+        public override void Bind(VisualElement styleable, Action action)
+        {
+            BindToProperty(styleable, action, nameof(VisualElement.StyleClass));
+        }
+
+        public override void UnBind(VisualElement styleable)
+        {
+            UnBindPropertyListener(styleable);
+        }
     }
 
     sealed class Id : UnarySelector
@@ -184,16 +247,50 @@ abstract class Selector
 
         public string IdName { get; }
         public override bool Matches(VisualElement styleable) => styleable.StyleId == IdName;
+
+        public override void Bind(VisualElement styleable, Action action)
+        {
+            BindToProperty(styleable, action, nameof(VisualElement.StyleId));
+        }
+
+        public override void UnBind(VisualElement styleable)
+        {
+            UnBindPropertyListener(styleable);
+        }
     }
 
     sealed class Or : Operator
     {
         public override bool Matches(VisualElement styleable) => Right.Matches(styleable) || Left.Matches(styleable);
+
+        public override void Bind(VisualElement styleable, Action action)
+        {
+            Left.Bind(styleable, action);
+            Right.Bind(styleable, action);
+        }
+
+        public override void UnBind(VisualElement styleable)
+        {
+            Left.UnBind(styleable);
+            Right.UnBind(styleable);
+        }
     }
 
     sealed class And : Operator
     {
         public override bool Matches(VisualElement styleable) => Right.Matches(styleable) && Left.Matches(styleable);
+
+        public override void Bind(VisualElement styleable, Action action)
+        {
+            Left.Bind(styleable, action);
+            Right.Bind(styleable, action);
+        }
+
+        public override void UnBind(VisualElement styleable)
+        {
+            Left.UnBind(styleable);
+            Right.UnBind(styleable);
+        }
     }
 
     sealed class SelectableElement : UnarySelector
@@ -206,6 +303,33 @@ abstract class Selector
         public string ElementName { get; }
         public override bool Matches(VisualElement styleable) =>
             string.Equals(GetNameAndBases(styleable)[0], ElementName, StringComparison.OrdinalIgnoreCase);
+
+        public override void Bind(VisualElement styleable, Action action) { }
+        public override void UnBind(VisualElement styleable) { }
+    }
+
+    sealed class ElementPropertyChecker : UnarySelector
+    {
+        public ElementPropertyChecker(string propertyName)
+        {
+            PropertyName = propertyName;
+        }
+
+        public string PropertyName { get; }
+        public override bool Matches(VisualElement styleable)
+        {
+            return styleable.GetType().GetProperty(PropertyName)?.GetValue(styleable) is bool condition && condition == true;
+        }
+
+        public override void Bind(VisualElement styleable, Action action)
+        {
+            BindToProperty(styleable, action, PropertyName);
+        }
+
+        public override void UnBind(VisualElement styleable)
+        {
+            UnBindPropertyListener(styleable);
+        }
     }
 
     sealed class Base : UnarySelector
@@ -224,12 +348,33 @@ abstract class Selector
                     return true;
             return false;
         }
+
+        public override void Bind(VisualElement styleable, Action action) { }
+        public override void UnBind(VisualElement styleable) { }
     }
 
     sealed class Child : Operator
     {
         public override bool Matches(VisualElement styleable) =>
             Right.Matches(styleable) && styleable.Parent != null && Left.Matches((VisualElement)styleable.Parent);
+
+        public override void Bind(VisualElement styleable, Action action)
+        {
+            Right.Bind(styleable, action);
+            BindToProperty(styleable, action, nameof(VisualElement.Parent));
+
+            if (styleable.Parent is VisualElement parent)
+                Left.Bind(parent, action);
+        }
+
+        public override void UnBind(VisualElement styleable)
+        {
+            Right.UnBind(styleable);
+            UnBindPropertyListener(styleable);
+
+            if (styleable.Parent is VisualElement parent)
+                Left.UnBind(parent);
+        }
     }
 
     sealed class Descendent : Operator
@@ -246,6 +391,34 @@ abstract class Selector
                 parent = parent.Parent as VisualElement;
             }
             return false;
+        }
+
+        public override void Bind(VisualElement styleable, Action action)
+        {
+            Right.Bind(styleable, action);
+            // this is adding too much complexity
+            // this will be implemented in the future
+            //BindToProperty(styleable, action, nameof(VisualElement.Parent));
+
+            var parent = styleable.Parent as VisualElement;
+            while (parent != null)
+            {
+                Left.Bind(parent, action);
+                parent = parent.Parent as VisualElement;
+            }
+        }
+
+        public override void UnBind(VisualElement styleable)
+        {
+            Right.UnBind(styleable);
+            //UnBindPropertyListener(styleable);
+
+            var parent = styleable.Parent as VisualElement;
+            while (parent != null)
+            {
+                Left.UnBind(parent);
+                parent = parent.Parent as VisualElement;
+            }
         }
     }
 

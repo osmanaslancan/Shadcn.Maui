@@ -18,6 +18,29 @@
             <Style TargetType="Entry">
                 <Setter Property="behaviors:EntryExtensionsBehavior.HasUnderLine" Value="False"/>
             </Style>
+            <Style Class="SEntry-Entry" TargetType="Entry">
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+            </Style>
+            <Style Class="SEntry-Border" TargetType="Border">
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Background}, Dark={StaticResource DarkBackground}}"/>
+                <Setter Property="StrokeThickness" Value="1"/>
+                <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Border}, Dark={StaticResource DarkBorder}}" />
+                <Setter Property="StrokeShape">
+                    <RoundRectangle CornerRadius="6"/>
+                </Setter>
+                <Setter Property="Padding" Value="1"/>
+            </Style>
+            <Style TargetType="Border">
+                <Style.Behaviors>
+                    <behaviors:SmartStyleBehavior Selector="SEntry:IsFocused>Border">
+                        <Style TargetType="Border">
+                            <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Ring}, Dark={StaticResource DarkRing}}" />
+                            <Setter Property="StrokeThickness" Value="2"/>
+                            <Setter Property="Padding" Value="0"/>
+                        </Style>
+                    </behaviors:SmartStyleBehavior>
+                </Style.Behaviors>
+            </Style>
             <Style TargetType="local:SButton">
                 <Style.Triggers>
                     <Trigger TargetType="local:SButton" Property="Variant" Value="Primary">
