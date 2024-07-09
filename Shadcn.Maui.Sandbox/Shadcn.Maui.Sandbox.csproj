@@ -62,7 +62,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Shadcn.Maui.Controls\Shadcn.Maui.csproj" />
+	  <ProjectReference Include="..\Shadcn.Maui\Shadcn.Maui.csproj" />
 	</ItemGroup>
 
 </Project>
