@@ -25,9 +25,9 @@
                 </shadcn:SCardHeader>
                 <VerticalStackLayout Padding="24,0,24,24">
                     <Label Text="Name"/>
-                    <Entry Placeholder="Name of your project"/>
+                    <shadcn:SEntry />
                     <Label Text="Framework"/>
-                    <Entry/>
+                    <shadcn:SEntry Placeholder="PlaceHolder"/>
                 </VerticalStackLayout>
                 <shadcn:SCardFooter Direction="Row" JustifyContent="SpaceBetween">
                     <shadcn:SButton Variant="Outline" Text="Cancel"/>

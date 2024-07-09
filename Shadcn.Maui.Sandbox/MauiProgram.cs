@@ -26,7 +26,7 @@ namespace Shadcn.Maui.Sandbox
                     fonts.AddFont("Geist-Black.ttf", "GeistBlack");
                     fonts.AddFont("Geist-UltraBlack.ttf", "GeistUltraBlack");
                 });
-
+            
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

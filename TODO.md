@@ -7,7 +7,7 @@
 - [ ] breadcrumb
 - [x] button
 - [ ] calendar
-- [ ] card
+- [x] card
 - [ ] carousel
 - [ ] checkbox
 - [ ] collapsible
@@ -20,7 +20,7 @@
 - [ ] hover-card
 - [ ] input-otp
 - [ ] input
-- [ ] label
+- [x] label
 - [ ] list-view
 - [ ] menubar
 - [ ] navigation-menu

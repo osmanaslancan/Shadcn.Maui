@@ -6,7 +6,6 @@ namespace Shadcn.Maui.Sandbox
         public MainPage()
         {
             InitializeComponent();
-            var style = new Style(typeof(VisualElement));
         }
     }
 }

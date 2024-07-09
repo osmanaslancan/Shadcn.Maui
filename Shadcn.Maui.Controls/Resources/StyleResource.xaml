@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Shadcn.Maui.Controls"
              xmlns:localres="clr-namespace:Shadcn.Maui.Resources;assembly=Shadcn.Maui"
-             xmlns:behaviros="clr-namespace:Shadcn.Maui.Behaviors;assembly=Shadcn.Maui"
+             xmlns:behaviors="clr-namespace:Shadcn.Maui.Behaviors;assembly=Shadcn.Maui"
              xmlns:core="clr-namespace:Shadcn.Maui.Core"
              x:Class="Shadcn.Maui.Resources.StyleResource">
     <ResourceDictionary.MergedDictionaries>
@@ -11,6 +11,12 @@
         <ResourceDictionary>
             <Style TargetType="ShellContent">
                 <Setter Property="NavigationPage.HasNavigationBar" Value="False"/>
+            </Style>
+            <Style TargetType="ScrollView">
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Background}, Dark={StaticResource DarkBackground}}"/>
+            </Style>
+            <Style TargetType="Entry">
+                <Setter Property="behaviors:EntryExtensionsBehavior.HasUnderLine" Value="False"/>
             </Style>
             <Style TargetType="local:SButton">
                 <Style.Triggers>
@@ -88,26 +94,26 @@
                         </VisualStateGroupList>
                     </Setter.Value>
                 </Setter>
-                <Setter Property="behaviros:CursorPointerBehavior.CursorPointer" Value="True" />
+                <Setter Property="behaviors:CursorPointerBehavior.CursorPointer" Value="True" />
                 <Setter Property="FontSize" Value="14"/>
                 <Setter Property="FontFamily" Value="GeistMedium"/>
             </Style>
             <Style TargetType="{x:Type Label}" ApplyToDerivedTypes="true">
                 <Style.Behaviors>
-                    <behaviros:SmartStyleBehavior Selector="SCardTitle Label">
+                    <behaviors:SmartStyleBehavior Selector="SCardTitle Label">
                         <Style TargetType="Label">
                             <Setter Property="FontSize" Value="24"/>
                             <Setter Property="LineHeight" Value="1"/>
                             <Setter Property="CharacterSpacing" Value="-0.4" />
                             <Setter Property="FontFamily" Value="GeistSemiBold"/>
                         </Style>
-                    </behaviros:SmartStyleBehavior>
-                    <behaviros:SmartStyleBehavior Selector="SCardDescription Label">
+                    </behaviors:SmartStyleBehavior>
+                    <behaviors:SmartStyleBehavior Selector="SCardDescription Label">
                         <Style TargetType="Label">
                             <Setter Property="FontSize" Value="14"/>
                             <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource MutedForeground}, Dark={StaticResource DarkMutedForeground}}" />
                         </Style>
-                    </behaviros:SmartStyleBehavior>
+                    </behaviors:SmartStyleBehavior>
                 </Style.Behaviors>
             </Style>
             <Style TargetType="local:SLabel">
@@ -126,6 +132,9 @@
                 <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Border}, Dark={StaticResource DarkBorder}}"/>
                 <Setter Property="StrokeShape">
                     <RoundRectangle CornerRadius="6"/>
+                </Setter>
+                <Setter Property="Shadow">
+                    <Shadow Offset="0, 0" Brush="#000000" Opacity=".1" Radius="1"/>
                 </Setter>
             </Style>
         </ResourceDictionary>
