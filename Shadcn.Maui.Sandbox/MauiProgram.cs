@@ -15,11 +15,20 @@ namespace Shadcn.Maui.Sandbox
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                    fonts.AddFont("GeistVF.ttf", "Geist");
+                    fonts.AddFont("Geist-Thin.ttf", "GeistThin");
+                    fonts.AddFont("Geist-UltraLight.ttf", "GeistUltraLight");
+                    fonts.AddFont("Geist-Light.ttf", "GeistLight");
+                    fonts.AddFont("Geist-Regular.ttf", "GeistRegular");
+                    fonts.AddFont("Geist-Regular.ttf", "Geist");
+                    fonts.AddFont("Geist-Medium.ttf", "GeistMedium");
+                    fonts.AddFont("Geist-SemiBold.ttf", "GeistSemiBold");
+                    fonts.AddFont("Geist-Bold.ttf", "GeistBold");
+                    fonts.AddFont("Geist-Black.ttf", "GeistBlack");
+                    fonts.AddFont("Geist-UltraBlack.ttf", "GeistUltraBlack");
                 });
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();
