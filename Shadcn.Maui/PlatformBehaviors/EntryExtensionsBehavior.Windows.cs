@@ -11,7 +11,7 @@ public partial class EntryExtensionsBehavior : PlatformBehavior<Entry, TextBox>
     private Dictionary<TextBox, Action<TextBox>> _restores = new();
 
 
-
+    
     protected override void OnAttachedTo(Entry bindable, TextBox platformView)
     {
         var oldBorderThickness = platformView.BorderThickness;

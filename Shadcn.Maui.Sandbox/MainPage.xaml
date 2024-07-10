@@ -5,7 +5,7 @@
              BackgroundColor="{StaticResource DarkBackground}"
              xmlns:shadcn="clr-namespace:Shadcn.Maui.Controls;assembly=Shadcn.Maui"
              x:Class="Shadcn.Maui.Sandbox.MainPage">
-    <ScrollView>
+        <ScrollView>
         <HorizontalStackLayout Spacing="10" HorizontalOptions="Center" VerticalOptions="Center">
             <VerticalStackLayout Spacing="10" HorizontalOptions="Center" VerticalOptions="Center">
                 <shadcn:SButton Variant="Primary" Text="Button"/>

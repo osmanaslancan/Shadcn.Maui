@@ -14,14 +14,18 @@ public partial class SEntry : ContentView
     {
         _entry = new Entry()
         {
-            StyleClass = ["SEntry-Entry"]
+            StyleClass = ["SEntry-Entry"],
         };
-        
+
         BindWrappedEntry(_entry);
         Content = new Border
         {
-            StyleClass = ["SEntry-Border"],
-            Content = _entry
+            StyleClass = ["SEntry-Ring"],
+            Content = new Border
+            {
+                StyleClass = ["SEntry-Border"],
+                Content = _entry
+            }
         };
     }
 }
