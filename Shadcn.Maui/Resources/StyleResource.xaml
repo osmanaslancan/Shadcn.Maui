@@ -9,6 +9,48 @@
     <ResourceDictionary.MergedDictionaries>
         <localres:Colors/>
         <ResourceDictionary>
+            <ControlTemplate x:Key="DefaultTabTriggerControlTemplate">
+                <Border HorizontalOptions="Center"  HeightRequest="40" Padding="2" StrokeShape="RoundRectangle 6" BackgroundColor="{AppThemeBinding Light={StaticResource Muted}, Dark={StaticResource DarkMuted}}">
+                    <FlexLayout HorizontalOptions="Center" BindableLayout.ItemsSource="{TemplateBinding BindingContext}" >
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Border VerticalOptions="Center" Padding="12,6,12,6" behaviors:CursorPointerBehavior.CursorPointer="True" StrokeShape="RoundRectangle 6">
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ClickCommand}" CommandParameter="{Binding Value}"/>
+                                    </Border.GestureRecognizers>
+                                    <Border.Triggers>
+                                        <DataTrigger TargetType="Border" Binding="{Binding IsActive}" Value="True">
+                                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Background}, Dark={StaticResource DarkBackground}}"/>
+                                        </DataTrigger>
+                                    </Border.Triggers>
+                                    <Label FontFamily="GeistMedium" TextColor="{AppThemeBinding Light={StaticResource MutedForeground}, Dark={StaticResource DarkMutedForeground}}" Text="{Binding Name}">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding IsActive}" Value="True">
+                                                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Foreground}, Dark={StaticResource DarkForeground}}" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </FlexLayout>
+                </Border>
+            </ControlTemplate>
+            <ControlTemplate x:Key="DefaultTabContentControlTemplate">
+                <ContentPresenter Content="{TemplateBinding BindingContext}"/>
+            </ControlTemplate>
+            <Style TargetType="local:Tabs">
+                <Setter Property="ControlTemplate">
+                    <ControlTemplate>
+                        <FlexLayout Direction="Column">
+                            <TemplatedView BindingContext="{TemplateBinding TabTriggers}" ControlTemplate="{TemplateBinding TabTriggerControlTemplate}"/>
+                            <TemplatedView BindingContext="{TemplateBinding ActiveContent}" ControlTemplate="{TemplateBinding TabContentControlTemplate}"/>
+                        </FlexLayout>
+                    </ControlTemplate>
+                </Setter>
+                <Setter Property="TabTriggerControlTemplate" Value="{StaticResource DefaultTabTriggerControlTemplate}" />
+                <Setter Property="TabContentControlTemplate" Value="{StaticResource DefaultTabContentControlTemplate}" />
+            </Style>
             <Style TargetType="ShellContent">
                 <Setter Property="NavigationPage.HasNavigationBar" Value="False"/>
             </Style>

@@ -21,6 +21,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui.Markup" Version="4.0.0" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<ProjectReference Include="..\Shadcn.Maui.Common\Shadcn.Maui.Common.csproj" />
 		<ProjectReference Include="..\Shadcn.Maui.SourceGen\Shadcn.Maui.SourceGen.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="False" />

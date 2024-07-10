@@ -4,8 +4,29 @@
              Shell.NavBarIsVisible="False"
              BackgroundColor="{StaticResource DarkBackground}"
              xmlns:shadcn="clr-namespace:Shadcn.Maui.Controls;assembly=Shadcn.Maui"
+             Padding="0,45,0,0"
              x:Class="Shadcn.Maui.Sandbox.MainPage">
-        <ScrollView>
+    <shadcn:Tabs>
+        <shadcn:Tabs.TabTriggers>
+            <shadcn:TabsTrigger Name="Test" Value="Test"   />
+            <shadcn:TabsTrigger Name="Test2" Value="Test2"  />
+            <shadcn:TabsTrigger Name="Test3" Value="Test3"/>
+            <shadcn:TabsTrigger Name="Test4" Value="Test4"  />
+        </shadcn:Tabs.TabTriggers>
+        <shadcn:TabContent TabName="Test">
+            <Label>Tab1</Label>
+        </shadcn:TabContent>
+        <shadcn:TabContent TabName="Test2">
+            <Label>Tab2</Label>
+        </shadcn:TabContent>
+        <shadcn:TabContent TabName="Test3">
+            <Label>Tab3</Label>
+        </shadcn:TabContent>
+        <shadcn:TabContent TabName="Test4">
+            <Label>Tab4</Label>
+        </shadcn:TabContent>
+    </shadcn:Tabs>
+    <!--<ScrollView>
         <HorizontalStackLayout Spacing="10" HorizontalOptions="Center" VerticalOptions="Center">
             <VerticalStackLayout Spacing="10" HorizontalOptions="Center" VerticalOptions="Center">
                 <shadcn:SButton Variant="Primary" Text="Button"/>
@@ -35,5 +56,5 @@
                 </shadcn:SCardFooter>
             </shadcn:SCard>
         </HorizontalStackLayout>
-    </ScrollView>
+    </ScrollView>-->
 </ContentPage>
