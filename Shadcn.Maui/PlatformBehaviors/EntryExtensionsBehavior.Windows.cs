@@ -1,27 +1,42 @@
-﻿using Microsoft.UI.Xaml.Controls;
+﻿using Microsoft.Maui.Platform;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
 using WinRT;
 
 namespace Shadcn.Maui.Behaviors;
 
 public partial class EntryExtensionsBehavior : PlatformBehavior<Entry, TextBox>
 {
-    private Microsoft.UI.Xaml.Style? _oldStyle;
+    private Dictionary<TextBox, Action<TextBox>> _restores = new();
+
+
 
     protected override void OnAttachedTo(Entry bindable, TextBox platformView)
     {
-        _oldStyle = platformView.Style;
-        platformView.Style = new Microsoft.UI.Xaml.Style(typeof(TextBox))
+        var oldBorderThickness = platformView.BorderThickness;
+        platformView.BorderThickness = new Microsoft.UI.Xaml.Thickness(0);
+
+        FrameworkElement childRoot = (FrameworkElement)VisualTreeHelper.GetChild(platformView, 0);
+
+        var commonStatesGroup = Microsoft.UI.Xaml.VisualStateManager.GetVisualStateGroups(childRoot).First(x => x.Name == "CommonStates");
+        var focusedState = commonStatesGroup.States.First(x => x.Name == "Focused");
+        commonStatesGroup.States.Remove(focusedState);
+
+        _restores[platformView] = (restoringItem) =>
         {
-            Setters =
-            {
-                new Microsoft.UI.Xaml.Setter(TextBox.BorderThicknessProperty, new Microsoft.UI.Xaml.Thickness(0)),
-                new Microsoft.UI.Xaml.Setter(TextBox.CornerRadiusProperty, new Microsoft.UI.Xaml.CornerRadius(4))
-            }
+            commonStatesGroup.States.Add(focusedState);
+            restoringItem.BorderThickness = oldBorderThickness;
         };
+
     }
 
     protected override void OnDetachedFrom(Entry bindable, TextBox platformView)
     {
-        platformView.Style = _oldStyle ?? Microsoft.UI.Xaml.Application.Current.Resources[typeof(TextBox)] as Microsoft.UI.Xaml.Style;
+        if (_restores.TryGetValue(platformView, out var restore))
+        {
+            restore(platformView);
+            _restores.Remove(platformView);
+        }
     }
 }
