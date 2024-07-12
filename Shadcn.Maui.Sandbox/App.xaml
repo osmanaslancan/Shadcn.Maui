@@ -12,6 +12,10 @@
                 <!--<ResourceDictionary Source="Resources/Styles/Styles.xaml" />-->
                 <shadcn:StyleResource/>
             </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="ContentPage" ApplyToDerivedTypes="True">
+                <Setter Property="NavigationPage.HasNavigationBar" Value="False"/>
+                <Setter Property="Shell.NavBarIsVisible" Value="False"/>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

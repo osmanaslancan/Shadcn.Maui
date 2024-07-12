@@ -39,6 +39,9 @@
             <ControlTemplate x:Key="DefaultTabContentControlTemplate">
                 <ContentPresenter Content="{TemplateBinding BindingContext}"/>
             </ControlTemplate>
+            <Style TargetType="ContentPage" ApplyToDerivedTypes="True">
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Background}, Dark={StaticResource DarkBackground}}"/>
+            </Style>
             <Style TargetType="local:Tabs">
                 <Setter Property="ControlTemplate">
                     <ControlTemplate>
@@ -84,8 +87,14 @@
                 <Setter Property="StrokeShape" Value="RoundRectangle 5"/>
                 <Setter Property="Padding" Value="1" />
             </Style>
+            <Style Class="SCard-FlexLayout" TargetType="FlexLayout">
+                <Setter Property="Direction" Value="Column"/>
+            </Style>
             <Style TargetType="local:SButton">
                 <Style.Triggers>
+                    <Trigger TargetType="local:SButton" Property="IsEnabled" Value="False">
+                        <Setter Property="Opacity" Value=".5"/>
+                    </Trigger>
                     <Trigger TargetType="local:SButton" Property="Variant" Value="Primary">
                         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource DarkPrimary}}" />
                         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource PrimaryForeground}, Dark={StaticResource DarkPrimaryForeground}}" />

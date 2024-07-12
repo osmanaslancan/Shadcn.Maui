@@ -1,10 +1,11 @@
-﻿namespace Shadcn.Maui.Controls;
+﻿
+namespace Shadcn.Maui.Controls;
 
 public enum ButtonVariant
 {
     Primary,
-    Destructive,
     Secondary,
+    Destructive,
     Outline,
     Ghost,
 }

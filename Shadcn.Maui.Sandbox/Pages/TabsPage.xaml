@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:shadcn="clr-namespace:Shadcn.Maui.Controls;assembly=Shadcn.Maui"
+             x:Class="Shadcn.Maui.Sandbox.Pages.TabsPage"
+             Title="Tabs">
+    <shadcn:Tabs>
+        <shadcn:Tabs.TabTriggers>
+            <shadcn:TabsTrigger Name="Tab1" Value="Tab1"   />
+            <shadcn:TabsTrigger Name="Tab2" Value="Tab2"  />
+            <shadcn:TabsTrigger Name="Tab3" Value="Tab3"/>
+            <shadcn:TabsTrigger Name="Tab4" Value="Tab4"  />
+        </shadcn:Tabs.TabTriggers>
+        <shadcn:TabContent TabName="Tab1">
+            <Label>Tab1</Label>
+        </shadcn:TabContent>
+        <shadcn:TabContent TabName="Tab2">
+            <Label>Tab2</Label>
+        </shadcn:TabContent>
+        <shadcn:TabContent TabName="Tab3">
+            <Label>Tab3</Label>
+        </shadcn:TabContent>
+        <shadcn:TabContent TabName="Tab4">
+            <Label>Tab4</Label>
+        </shadcn:TabContent>
+    </shadcn:Tabs>
+</ContentPage>

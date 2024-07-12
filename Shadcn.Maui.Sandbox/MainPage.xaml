@@ -1,61 +1,40 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             Shell.NavBarIsVisible="False"
-             BackgroundColor="{StaticResource DarkBackground}"
              xmlns:shadcn="clr-namespace:Shadcn.Maui.Controls;assembly=Shadcn.Maui"
              xmlns:sbehaviors="clr-namespace:Shadcn.Maui.Behaviors;assembly=Shadcn.Maui"
              Padding="0,45,0,0"
              x:Class="Shadcn.Maui.Sandbox.MainPage">
-    <shadcn:Tabs>
-        <shadcn:Tabs.TabTriggers>
-            <shadcn:TabsTrigger Name="Test" Value="Test"   />
-            <shadcn:TabsTrigger Name="Test2" Value="Test2"  />
-            <shadcn:TabsTrigger Name="Test3" Value="Test3"/>
-            <shadcn:TabsTrigger Name="Test4" Value="Test4"  />
-        </shadcn:Tabs.TabTriggers>
-        <shadcn:TabContent TabName="Test">
-            <ScrollView>
-                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center" VerticalOptions="Center">
-                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center" VerticalOptions="Center">
-                        <shadcn:SButton Variant="Primary" Text="Button"/>
-                        <shadcn:SButton Variant="Secondary" Text="Secondary"/>
-                        <shadcn:SButton Variant="Destructive" Text="Destructive"/>
-                        <shadcn:SButton Variant="Outline" Text="Outline"/>
-                        <shadcn:SButton Variant="Ghost" Text="Ghost"/>
-                    </VerticalStackLayout>
-                    <shadcn:SCard>
-                        <shadcn:SCardHeader>
-                            <shadcn:SCardTitle>
-                                <Label>Create project</Label>
-                            </shadcn:SCardTitle>
-                            <shadcn:SCardDescription>
-                                <Label>Deploy your new project in one-click.</Label>
-                            </shadcn:SCardDescription>
-                        </shadcn:SCardHeader>
-                        <VerticalStackLayout Padding="24,0,24,24">
-                            <Label Text="Name"/>
-                            <shadcn:SEntry />
-                            <Label Text="Framework"/>
-                            <shadcn:SEntry Placeholder="PlaceHolder" />
-                            <Label Text="Rich Entry"/>
-                        </VerticalStackLayout>
-                        <shadcn:SCardFooter Direction="Row" JustifyContent="SpaceBetween">
-                            <shadcn:SButton Variant="Outline" Text="Cancel"/>
-                            <shadcn:SButton Variant="Primary" Text="Deploy"/>
-                        </shadcn:SCardFooter>
-                    </shadcn:SCard>
-                </HorizontalStackLayout>
-            </ScrollView>
-        </shadcn:TabContent>
-        <shadcn:TabContent TabName="Test2">
-            <Label>Tab2</Label>
-        </shadcn:TabContent>
-        <shadcn:TabContent TabName="Test3">
-            <Label>Tab3</Label>
-        </shadcn:TabContent>
-        <shadcn:TabContent TabName="Test4">
-            <Label>Tab4</Label>
-        </shadcn:TabContent>
-    </shadcn:Tabs>
+    <ScrollView>
+        <HorizontalStackLayout Spacing="10" HorizontalOptions="Center" VerticalOptions="Center">
+            <VerticalStackLayout Spacing="10" HorizontalOptions="Center" VerticalOptions="Center">
+                <shadcn:SButton Variant="Primary" Text="Button"/>
+                <shadcn:SButton Variant="Secondary" Text="Secondary"/>
+                <shadcn:SButton Variant="Destructive" Text="Destructive"/>
+                <shadcn:SButton Variant="Outline" Text="Outline"/>
+                <shadcn:SButton Variant="Ghost" Text="Ghost"/>
+            </VerticalStackLayout>
+            <shadcn:SCard>
+                <shadcn:SCardHeader>
+                    <shadcn:SCardTitle>
+                        <Label>Create project</Label>
+                    </shadcn:SCardTitle>
+                    <shadcn:SCardDescription>
+                        <Label>Deploy your new project in one-click.</Label>
+                    </shadcn:SCardDescription>
+                </shadcn:SCardHeader>
+                <VerticalStackLayout Padding="24,0,24,24">
+                    <Label Text="Name"/>
+                    <shadcn:SEntry />
+                    <Label Text="Framework"/>
+                    <shadcn:SEntry Placeholder="PlaceHolder" />
+                    <Label Text="Rich Entry"/>
+                </VerticalStackLayout>
+                <shadcn:SCardFooter Direction="Row" JustifyContent="SpaceBetween">
+                    <shadcn:SButton Variant="Outline" Text="Cancel"/>
+                    <shadcn:SButton Variant="Primary" Text="Deploy"/>
+                </shadcn:SCardFooter>
+            </shadcn:SCard>
+        </HorizontalStackLayout>
+    </ScrollView>
 </ContentPage>

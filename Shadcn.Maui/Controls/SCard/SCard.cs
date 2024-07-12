@@ -1,15 +1,15 @@
 namespace Shadcn.Maui.Controls;
 
 using CommunityToolkit.Maui.Markup;
+using Shadcn.Maui.Common;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using static CommunityToolkit.Maui.Markup.GridRowsColumns;
 
 [ContentProperty(nameof(Children))]
-public class SCard : ContentView
+public partial class SCard : ContentView
 {
     public static readonly BindableProperty ChildrenProperty =
-        BindableProperty.Create(nameof(Children), typeof(ObservableCollection<IView>), typeof(SCard), new ObservableCollection<IView>());
+        BindableProperty.Create(nameof(Children), typeof(ObservableCollection<IView>), typeof(SCard), defaultValueCreator: (obj) => new ObservableCollection<IView>());
 
     new public ObservableCollection<IView> Children
     {

@@ -9,8 +9,6 @@ namespace Shadcn.Maui.Behaviors;
 public partial class EntryExtensionsBehavior : PlatformBehavior<Entry, TextBox>
 {
     private Dictionary<TextBox, Action<TextBox>> _restores = new();
-
-
     
     protected override void OnAttachedTo(Entry bindable, TextBox platformView)
     {
@@ -18,6 +16,9 @@ public partial class EntryExtensionsBehavior : PlatformBehavior<Entry, TextBox>
         platformView.BorderThickness = new Microsoft.UI.Xaml.Thickness(0);
 
         FrameworkElement childRoot = (FrameworkElement)VisualTreeHelper.GetChild(platformView, 0);
+
+        if (childRoot is null)
+            return;
 
         var commonStatesGroup = Microsoft.UI.Xaml.VisualStateManager.GetVisualStateGroups(childRoot).First(x => x.Name == "CommonStates");
         var focusedState = commonStatesGroup.States.First(x => x.Name == "Focused");

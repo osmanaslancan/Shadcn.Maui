@@ -12,7 +12,7 @@ class WrapperSourceGenerator : IIncrementalGenerator
     {
         public string GetPropertyName() => RemovePropertyPostfix(Field.Name);
     };
-    private record Model(string Name, string Namespace, INamedTypeSymbol targetType, List<BindableProperty> fieldsToGenerate, List<BindableProperty> existingFields);
+    private record Model(string Name, string Namespace, INamedTypeSymbol targetType, List<BindableProperty> fieldsToGenerate, List<IFieldSymbol> existingFields);
 
     private static string RemovePropertyPostfix(string name)
     {
@@ -51,8 +51,8 @@ class WrapperSourceGenerator : IIncrementalGenerator
                    .Select(x => new BindableProperty(x, recursiveMembers.FirstOrDefault(y => y.Name == "get_" + RemovePropertyPostfix(x.Name)) as IMethodSymbol)).ToList();
                    var className = syntaxNode.Name;
                    var namespaceName = syntaxNode.ContainingNamespace.ToDisplayString();
-                   var existingFields = syntaxNode.GetMembers().Where(x => x.IsStatic && x.Name.EndsWith("Property")).OfType<IFieldSymbol>()
-                   .Select(x => new BindableProperty(x, targetType.GetMembers().First(y => y.Name == "get_" + RemovePropertyPostfix(x.Name)) as IMethodSymbol)).ToList(); 
+                   var existingFields = syntaxNode.GetMembers().Where(x => x.IsStatic && x.Name.EndsWith("Property")).OfType<IFieldSymbol>().ToList();
+                   
 
                    return new Model(className, namespaceName, targetType, fieldsToGenerate, existingFields);
                })
@@ -88,9 +88,9 @@ class WrapperSourceGenerator : IIncrementalGenerator
         foreach (var bindableProperty in model.fieldsToGenerate)
         {
             var field = bindableProperty.Field;
-            var existingField = model.existingFields.Select(x => x.Field).FirstOrDefault(x => x.Name == field.Name);
+            var existingField = model.existingFields.FirstOrDefault(x => x.Name == field.Name);
 
-            if (existingField is not null && existingField.ContainingType.Name == model.Name)
+            if ((existingField is not null && existingField.ContainingType.Name == model.Name) || bindableProperty.TargetType is null)
             {
                 continue;
             }
@@ -118,7 +118,7 @@ class WrapperSourceGenerator : IIncrementalGenerator
         foreach (var bindableProperty in model.fieldsToGenerate)
         {
             var field = bindableProperty.Field;
-            var existingField = model.existingFields.Select(x => x.Field).FirstOrDefault(x => x.Name == field.Name);
+            var existingField = model.existingFields.FirstOrDefault(x => x.Name == field.Name);
 
             if (existingField is not null && existingField.ContainingType.Name == model.Name)
             {
