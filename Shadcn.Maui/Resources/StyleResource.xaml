@@ -66,7 +66,7 @@
             <Style Class="SEntry-Ring" TargetType="Border">
                 <Style.Triggers>
                     <Trigger TargetType="Border" Property="IsFocused" Value="True">
-                        <Setter Property="BackgroundColor" Value="Black" />
+                        <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Ring}, Dark={StaticResource DarkRing}}"/>
                         <Setter Property="StrokeThickness" Value="1"/>
                         <Setter Property="Padding" Value="0"/>
                     </Trigger>
