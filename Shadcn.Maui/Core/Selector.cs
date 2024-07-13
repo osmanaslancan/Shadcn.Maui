@@ -16,8 +16,8 @@ abstract class Selector
 
     protected void BindToProperty(VisualElement styleable, Action action, string propertyName)
     {
-        if (_changeHandlers.ContainsKey(styleable.Id))
-            throw new InvalidOperationException("Already bound to this styleable");
+        //if (_changeHandlers.ContainsKey(styleable.Id))
+        //    throw new InvalidOperationException("Already bound to this styleable");
 
         styleable.PropertyChanged += _changeHandlers[styleable.Id] = (s, e) =>
         {

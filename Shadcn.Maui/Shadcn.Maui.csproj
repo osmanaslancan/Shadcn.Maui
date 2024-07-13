@@ -56,10 +56,17 @@
 	  <Compile Remove="**\*.Windows.cs" />
 	  <None Include="**\*.Windows.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
 	</ItemGroup>
-	
+
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Fonts\*" />
+  </ItemGroup>
 
   <ItemGroup>
 	  <MauiXaml Update="Resources\Colors.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Resources\Icons.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Resources\StyleResource.xaml">

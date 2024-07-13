@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:shadcn="clr-namespace:Shadcn.Maui.Controls;assembly=Shadcn.Maui"
+             x:Class="Shadcn.Maui.Sandbox.Pages.AccordionPage"
+             Title="AccordionPage">
+    <FlexLayout JustifyContent="Center" AlignItems="Center" Direction="Column" BackgroundColor="{AppThemeBinding Light={StaticResource Background}, Dark={StaticResource DarkBackground}}">
+        <shadcn:SAccordion>
+            <shadcn:SAccordionItem WidthRequest="300">
+                <shadcn:SAccordionItem.TriggerTemplate>
+                    <DataTemplate>
+                        <Label Text="Is it accessible?"/>
+                    </DataTemplate>
+                </shadcn:SAccordionItem.TriggerTemplate>
+                <shadcn:SAccordionItem.ContentTemplate>
+                    <DataTemplate>
+                        <Label Margin="0,25,0,0" Text="Yes. It adheres to the WAI-ARIA design pattern."/>
+                    </DataTemplate>
+                </shadcn:SAccordionItem.ContentTemplate>
+            </shadcn:SAccordionItem>
+            <shadcn:SAccordionItem  WidthRequest="300">
+                <shadcn:SAccordionItem.TriggerTemplate>
+                    <DataTemplate>
+                        <Label Text="Is it styled?"/>
+                    </DataTemplate>
+                </shadcn:SAccordionItem.TriggerTemplate>
+                <shadcn:SAccordionItem.ContentTemplate>
+                    <DataTemplate>
+                        <Label Margin="0,25,0,0" Text="Yes. It comes with default styles that matches the other components' aesthetic."/>
+                    </DataTemplate>
+                </shadcn:SAccordionItem.ContentTemplate>
+            </shadcn:SAccordionItem>
+            <shadcn:SAccordionItem WidthRequest="300">
+                <shadcn:SAccordionItem.TriggerTemplate>
+                    <DataTemplate>
+                        <Label Text="Is it animated?"/>
+                    </DataTemplate>
+                </shadcn:SAccordionItem.TriggerTemplate>
+                <shadcn:SAccordionItem.ContentTemplate>
+                    <DataTemplate>
+                        <Label Margin="0,25,0,0" Text="Yes. It's animated by default, but you can disable it if you prefer."/>
+                    </DataTemplate>
+                </shadcn:SAccordionItem.ContentTemplate>
+            </shadcn:SAccordionItem>
+        </shadcn:SAccordion>
+    </FlexLayout>
+</ContentPage>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Shadcn.Maui.Controls;
+using Shadcn.Maui.Core;
 
 namespace Shadcn.Maui.Sandbox
 {
@@ -25,6 +26,7 @@ namespace Shadcn.Maui.Sandbox
                     fonts.AddFont("Geist-Bold.ttf", "GeistBold");
                     fonts.AddFont("Geist-Black.ttf", "GeistBlack");
                     fonts.AddFont("Geist-UltraBlack.ttf", "GeistUltraBlack");
+                    fonts.AddLucideIconFonts();
                 });
             
 #if DEBUG

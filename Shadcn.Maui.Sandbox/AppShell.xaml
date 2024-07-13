@@ -11,5 +11,6 @@
         <ShellContent Route="ButtonsPage" Title="Buttons" ContentTemplate="{DataTemplate pages:ButtonsPage}"/>
         <ShellContent Route="TabsPage" Title="Tabs" ContentTemplate="{DataTemplate pages:TabsPage}"/>
         <ShellContent Route="CardPage" Title="Card" ContentTemplate="{DataTemplate pages:CardPage}"/>
+        <ShellContent Route="AccordionPage" Title="Accordion" ContentTemplate="{DataTemplate pages:AccordionPage}"/>
     </TabBar>
 </Shell>
