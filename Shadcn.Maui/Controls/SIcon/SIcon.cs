@@ -8,10 +8,10 @@ public class SIcon : Image
         BindableProperty.Create(nameof(Icon), typeof(string), typeof(SIcon));
 
     public static readonly BindableProperty SizeProperty =
-        BindableProperty.Create(nameof(Size), typeof(double), typeof(SIcon));
+        BindableProperty.Create(nameof(Size), typeof(double), typeof(SIcon), 24.0);
 
     public static readonly BindableProperty ColorProperty =
-        BindableProperty.Create(nameof(Color), typeof(Color), typeof(SIcon));
+        BindableProperty.Create(nameof(Color), typeof(Color), typeof(SIcon), Colors.Black);
 
     public string Icon
     {

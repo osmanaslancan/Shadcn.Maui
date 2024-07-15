@@ -28,7 +28,6 @@
                     <shadcn:SEntry />
                     <Label Text="Framework"/>
                     <shadcn:SEntry Placeholder="PlaceHolder" />
-                    <Label Text="Rich Entry"/>
                 </VerticalStackLayout>
                 <shadcn:SCardFooter Direction="Row" JustifyContent="SpaceBetween">
                     <shadcn:SButton Variant="Outline" Text="Cancel"/>

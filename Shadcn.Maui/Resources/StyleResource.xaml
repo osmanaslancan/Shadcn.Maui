@@ -91,6 +91,12 @@
                 </Setter>
                 <Setter Property="behaviors:CursorPointerBehavior.CursorPointer" Value="True" />
             </Style>
+            <Style TargetType="local:SIcon">
+                <Setter Property="HeightRequest" Value="20" />
+                <Setter Property="WidthRequest" Value="20" />
+                <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource DarkPrimary}}"/>
+                <Setter Property="Size" Value="24"/>
+            </Style>
             <Style TargetType="local:SAccordion">
                 <Setter Property="ControlTemplate">
                     <ControlTemplate>
@@ -115,6 +121,23 @@
                 </Setter>
                 <Setter Property="TabTriggerControlTemplate" Value="{StaticResource DefaultTabTriggerControlTemplate}" />
                 <Setter Property="TabContentControlTemplate" Value="{StaticResource DefaultTabContentControlTemplate}" />
+            </Style>
+            <Style TargetType="local:SAlert">
+                <Setter Property="ControlTemplate">
+                    <ControlTemplate>
+                        <local:SCard>
+                            <Border Margin="15">
+                                <HorizontalStackLayout>
+                                    <local:SContentPresenter VerticalOptions="Start" Margin="0,0,15,0" Content="{TemplateBinding Icon}"/>
+                                    <VerticalStackLayout>
+                                        <ContentPresenter Content="{TemplateBinding Title}"/>
+                                        <ContentPresenter Content="{TemplateBinding Description}"/>
+                                    </VerticalStackLayout>
+                                </HorizontalStackLayout>
+                            </Border>
+                        </local:SCard>
+                    </ControlTemplate>
+                </Setter>
             </Style>
             <Style TargetType="ShellContent">
                 <Setter Property="NavigationPage.HasNavigationBar" Value="False"/>
@@ -270,13 +293,15 @@
                             </Setter>
                         </Style>
                     </behaviors:SmartStyleBehavior>
-                    <behaviors:SmartStyleBehavior Selector="SAccordionItem .SAccordionItem-Content Label">
-                        <Style TargetType="Label">
-                            <Setter Property="FontFamily" Value="GeistMedium" />
-                            <Setter Property="FontSize" Value="14"/>
-                        </Style>
-                    </behaviors:SmartStyleBehavior>
                 </Style.Behaviors>
+            </Style>
+            <Style Class="SAlert-Title" TargetType="Label">
+                <Setter Property="FontFamily" Value="GeistMedium" />
+                <Setter Property="FontSize" Value="14"/>
+            </Style>
+            <Style Class="SAlert-Description" TargetType="Label">
+                <Setter Property="FontFamily" Value="GeistMedium"/>
+                <Setter Property="Margin" Value="0,0,0,4"/>
             </Style>
             <Style TargetType="local:SLabel">
                 <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource DarkPrimary}}" />

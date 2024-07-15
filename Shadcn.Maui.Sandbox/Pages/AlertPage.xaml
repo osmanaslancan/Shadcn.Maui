@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:shadcn="clr-namespace:Shadcn.Maui.Controls;assembly=Shadcn.Maui"
+             x:Class="Shadcn.Maui.Sandbox.Pages.AlertPage"
+             Title="Alert">
+    <FlexLayout JustifyContent="Center" AlignItems="Center" BackgroundColor="{AppThemeBinding Light={StaticResource Background}, Dark={StaticResource DarkBackground}}">
+        <shadcn:SAlert>
+            <shadcn:SAlert.Icon>
+                <shadcn:SIcon Icon="{StaticResource IconTerminal}"/>
+            </shadcn:SAlert.Icon>
+            <shadcn:SAlert.Title>
+                <Label>Heads up!</Label>
+            </shadcn:SAlert.Title>
+            <shadcn:SAlert.Description>
+                <Label>You can add components to your app using the cli.</Label>
+            </shadcn:SAlert.Description>
+        </shadcn:SAlert>
+    </FlexLayout>
+</ContentPage>
