@@ -4,26 +4,24 @@
              xmlns:shadcn="clr-namespace:Shadcn.Maui.Controls;assembly=Shadcn.Maui"
              x:Class="Shadcn.Maui.Sandbox.Pages.CardPage"
              Title="CardPage">
-    <FlexLayout JustifyContent="Center" AlignItems="Center" BackgroundColor="{AppThemeBinding Light={StaticResource Background}, Dark={StaticResource DarkBackground}}">
-        <shadcn:SCard WidthRequest="300">
-            <shadcn:SCardHeader>
-                <shadcn:SCardTitle>
-                    <Label>Create project</Label>
-                </shadcn:SCardTitle>
-                <shadcn:SCardDescription>
-                    <Label>Deploy your new project in one-click.</Label>
-                </shadcn:SCardDescription>
-            </shadcn:SCardHeader>
-            <VerticalStackLayout Padding="24,0,24,24">
-                <Label Text="Name"/>
-                <shadcn:SEntry />
-                <Label Text="Framework"/>
-                <shadcn:SEntry />
-            </VerticalStackLayout>
-            <shadcn:SCardFooter Direction="Row" JustifyContent="SpaceBetween">
-                <shadcn:SButton Variant="Outline" Text="Cancel"/>
-                <shadcn:SButton Variant="Primary" Text="Deploy"/>
-            </shadcn:SCardFooter>
-        </shadcn:SCard>
-    </FlexLayout>
+    <shadcn:SCard WidthRequest="300" VerticalOptions="Center" HorizontalOptions="Center">
+        <shadcn:SCardHeader>
+            <shadcn:SCardTitle>
+                <Label>Create project</Label>
+            </shadcn:SCardTitle>
+            <shadcn:SCardDescription>
+                <Label>Deploy your new project in one-click.</Label>
+            </shadcn:SCardDescription>
+        </shadcn:SCardHeader>
+        <VerticalStackLayout Padding="24,0,24,24">
+            <Label Text="Name"/>
+            <shadcn:SEntry />
+            <Label Text="Framework"/>
+            <shadcn:SEntry />
+        </VerticalStackLayout>
+        <shadcn:SCardFooter Direction="Row" JustifyContent="SpaceBetween">
+            <shadcn:SButton Variant="Outline" Text="Cancel"/>
+            <shadcn:SButton Variant="Primary" Text="Deploy"/>
+        </shadcn:SCardFooter>
+    </shadcn:SCard>
 </ContentPage>

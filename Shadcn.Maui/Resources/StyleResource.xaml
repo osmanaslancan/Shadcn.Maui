@@ -7,7 +7,7 @@
              xmlns:core="clr-namespace:Shadcn.Maui.Core"
              x:Class="Shadcn.Maui.Resources.StyleResource">
     <ResourceDictionary.MergedDictionaries>
-        <localres:Colors/>
+        <localres:ShadcnColors/>
         <localres:Icons/>
         <ResourceDictionary>
             <ControlTemplate x:Key="DefaultTabTriggerControlTemplate">
@@ -260,20 +260,6 @@
             </Style>
             <Style TargetType="{x:Type Label}" ApplyToDerivedTypes="true">
                 <Style.Behaviors>
-                    <behaviors:SmartStyleBehavior Selector="SCardTitle Label">
-                        <Style TargetType="Label">
-                            <Setter Property="FontSize" Value="24"/>
-                            <Setter Property="LineHeight" Value="1"/>
-                            <Setter Property="CharacterSpacing" Value="-0.4" />
-                            <Setter Property="FontFamily" Value="GeistSemiBold"/>
-                        </Style>
-                    </behaviors:SmartStyleBehavior>
-                    <behaviors:SmartStyleBehavior Selector="SCardDescription Label">
-                        <Style TargetType="Label">
-                            <Setter Property="FontSize" Value="14"/>
-                            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource MutedForeground}, Dark={StaticResource DarkMutedForeground}}" />
-                        </Style>
-                    </behaviors:SmartStyleBehavior>
                     <behaviors:SmartStyleBehavior Selector="SAccordionItem .SAccordionItem-Trigger Label">
                         <Style TargetType="Label">
                             <Setter Property="FontFamily" Value="GeistMedium" />
@@ -305,24 +291,6 @@
             </Style>
             <Style TargetType="local:SLabel">
                 <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource DarkPrimary}}" />
-            </Style>
-            <Style TargetType="local:SCardHeader">
-                <Setter Property="Direction" Value="Column"/>
-                <Setter Property="Margin" Value="24" />
-            </Style>
-            <Style TargetType="local:SCardFooter">
-                <Setter Property="Margin" Value="24,0,24,24" />
-            </Style>
-            <Style Class="SCard.Border" TargetType="Border">
-                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Card}, Dark={StaticResource DarkCard}}"/>
-                <Setter Property="StrokeThickness" Value="0.5"/>
-                <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Border}, Dark={StaticResource DarkBorder}}"/>
-                <Setter Property="StrokeShape">
-                    <RoundRectangle CornerRadius="6"/>
-                </Setter>
-                <Setter Property="Shadow">
-                    <Shadow Offset="0, 0" Brush="#000000" Opacity=".1" Radius="1"/>
-                </Setter>
             </Style>
         </ResourceDictionary>
     </ResourceDictionary.MergedDictionaries>

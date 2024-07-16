@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-              x:Class="Shadcn.Maui.Resources.Colors">
+              x:Class="Shadcn.Maui.Resources.ShadcnColors">
     <Color x:Key="Background">#FFFFFF</Color>
     <Color x:Key="Foreground">#0B0C33</Color>
     <Color x:Key="Card">#FFFFFF</Color>

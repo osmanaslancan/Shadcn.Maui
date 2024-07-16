@@ -3,9 +3,9 @@ using Shadcn.Maui.Common;
 namespace Shadcn.Maui.Resources;
 
 [ColorDictionary]
-public partial class Colors : ResourceDictionary
+public partial class ShadcnColors : ResourceDictionary
 {
-	public Colors()
+	public ShadcnColors()
 	{
 		InitializeComponent();
         AddOpacities();

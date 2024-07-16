@@ -63,7 +63,7 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <MauiXaml Update="Resources\Colors.xaml">
+	  <MauiXaml Update="Resources\ShadcnColors.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Resources\Icons.xaml">
@@ -80,5 +80,11 @@
     <Folder Include="Platforms\MacCatalyst\" />
     <Folder Include="Platforms\Tizen\" />
     <Folder Include="Platforms\Windows\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\ShadcnColors.xaml.cs">
+      <DependentUpon>ShadcnColors.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>
