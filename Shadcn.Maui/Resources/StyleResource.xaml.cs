@@ -96,7 +96,6 @@ public partial class StyleResource : ResourceDictionary
                             CornerRadius = new CornerRadius(6),
                             StrokeThickness = 1,
                         }
-                        .AppThemeBinding(RoundRectangle.StrokeProperty, GetColor("Border"), GetColor("DarkBorder"))
                         .Bind(RoundRectangle.HeightRequestProperty, "Height", source: innerContent)
                         .Bind(RoundRectangle.WidthRequestProperty, "Width", source: innerContent),
                         innerContent,
