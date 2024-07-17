@@ -69,46 +69,17 @@ public partial class StyleResource : ResourceDictionary
             NewStyle<SCard>("SCard")
             .Add(SCard.ControlTemplateProperty, new ControlTemplate(() =>
             {
-                var innerContent = new Border
+                return new SBorder()
                 {
-                    StyleClass = ["Shadcn-SCard-Border"],
+                    CornerRadius = new CornerRadius(6),
                     Content = new StackLayout
                     {
                         VerticalOptions = LayoutOptions.Start,
                     }.Bind(BindableLayout.ItemsSourceProperty, nameof(SCard.Children), source: RelativeBindingSource.TemplatedParent)
-                                    .SetBindableValue(BindableLayout.ItemTemplateProperty, new DataTemplate(() => new ContentPresenter().Bind(ContentPresenter.ContentProperty)))
-                };
-
-                return new AbsoluteLayout
-                {
-                    Children =
-                    {
-                        new RoundRectangle()
-                        {
-                            CornerRadius = new CornerRadius(6),
-                            StrokeThickness = 1,
-                        }.AppThemeBinding(RoundRectangle.FillProperty, GetColor("Card"), GetColor("DarkCard"))
-                        .AppThemeBinding(RoundRectangle.StrokeProperty, GetColor("Card"), GetColor("DarkCard"))
-                        .Bind(RoundRectangle.HeightRequestProperty, "Height", source: innerContent)
-                        .Bind(RoundRectangle.WidthRequestProperty, "Width", source: innerContent),
-                        new RoundRectangle()
-                        {
-                            CornerRadius = new CornerRadius(6),
-                            StrokeThickness = 1,
-                        }
-                        .Bind(RoundRectangle.HeightRequestProperty, "Height", source: innerContent)
-                        .Bind(RoundRectangle.WidthRequestProperty, "Width", source: innerContent),
-                        innerContent,
-                    }
-                };
+                    .SetBindableValue(BindableLayout.ItemTemplateProperty, new DataTemplate(() => new ContentPresenter().Bind(ContentPresenter.ContentProperty)))
+                }.AppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Card"), GetColor("DarkCard"))
+                .AppThemeBinding(SBorder.StrokeProperty, GetColor("Border"), GetColor("DarkBorder"));
             })));
-
-        RegisterStyle(NewStyle<Border>("SCard-Border")
-            .Add(
-                (Border.BackgroundColorProperty, Colors.Transparent),
-                (Border.StrokeProperty, Colors.Transparent),
-                (Border.StrokeShapeProperty, new RoundRectangle() { CornerRadius = new CornerRadius(6) }),
-                (Border.ShadowProperty, new Shadow() { Offset = new Point(0, 0), Brush = new SolidColorBrush(Colors.Black), Opacity = 0.1f, Radius = 1f })));
 
         RegisterStyle(NewStyle<StackLayout>("SCard-StackLayout")
             .Add(StackLayout.OrientationProperty, StackOrientation.Vertical));
