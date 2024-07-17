@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Maui;
+using Microsoft.Extensions.Logging;
 using Shadcn.Maui.Controls;
 using Shadcn.Maui.Core;
 
@@ -9,8 +10,10 @@ namespace Shadcn.Maui.Sandbox
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
+
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .UseShadcnMauiControls()
                 .ConfigureFonts(fonts =>
                 {

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Shadcn.Maui.Sandbox.Pages.SAlertDialogPage"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:shadcn="clr-namespace:Shadcn.Maui.Controls;assembly=Shadcn.Maui"
+             Background="{StaticResource DarkBackground}"
+             Title="SAlertDialogPage">
+    <VerticalStackLayout>
+        
+        <shadcn:SAlertDialog>
+            <shadcn:SAlertDialog.TriggerView>
+                <shadcn:SButton HorizontalOptions="Center" VerticalOptions="Center" Variant="Outline" Text="Show Dialog"/>
+            </shadcn:SAlertDialog.TriggerView>
+            <shadcn:SAlertDialog.Content>
+                <shadcn:SPopup>
+                    <shadcn:SCard>
+                        <shadcn:SCardHeader>
+                            <shadcn:SCardTitle>
+                                <Label>Are you absolutely sure?</Label>
+                            </shadcn:SCardTitle>
+                            <shadcn:SCardDescription>
+                                <Label>This action cannot be undone. This will permanently delete your accountand remove your data from our servers.</Label>
+                            </shadcn:SCardDescription>
+                        </shadcn:SCardHeader>
+                        <shadcn:SCardFooter JustifyContent="End">
+                            <shadcn:SButton Variant="Outline" Text="Cancel"/>
+                            <shadcn:SButton Margin="5,0,0,0" Variant="Primary" Text="Continue"/>
+                        </shadcn:SCardFooter>
+                    </shadcn:SCard>
+                </shadcn:SPopup>
+            </shadcn:SAlertDialog.Content>
+        </shadcn:SAlertDialog>
+    </VerticalStackLayout>
+</ContentPage>

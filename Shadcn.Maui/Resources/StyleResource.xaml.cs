@@ -15,6 +15,7 @@ public partial class StyleResource : ResourceDictionary
     {
         InitializeComponent();
         RegisterSCardStyles();
+        RegisterSAlertDialogStyles();
     }
 
     private Color GetColor(string color)
@@ -74,6 +75,7 @@ public partial class StyleResource : ResourceDictionary
                     CornerRadius = new CornerRadius(6),
                     Content = new StackLayout
                     {
+                        StyleClass = ["Shadcn-SCard-StackLayout"],
                         VerticalOptions = LayoutOptions.Start,
                     }.Bind(BindableLayout.ItemsSourceProperty, nameof(SCard.Children), source: RelativeBindingSource.TemplatedParent)
                     .SetBindableValue(BindableLayout.ItemTemplateProperty, new DataTemplate(() => new ContentPresenter().Bind(ContentPresenter.ContentProperty)))
@@ -105,5 +107,9 @@ public partial class StyleResource : ResourceDictionary
             .Add(
                 (Label.FontSizeProperty, 14))
             .AddAppThemeBinding(Label.TextColorProperty, GetColor("MutedForeground"), GetColor("DarkMutedForeground"));
+    }
+
+    private void RegisterSAlertDialogStyles()
+    {
     }
 }
