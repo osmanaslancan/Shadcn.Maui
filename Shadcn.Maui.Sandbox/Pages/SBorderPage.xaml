@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:shadcn="clr-namespace:Shadcn.Maui.Controls;assembly=Shadcn.Maui"
+             x:Class="Shadcn.Maui.Sandbox.Pages.SBorderPage"
+             Title="SBorderPage">
+    <HorizontalStackLayout HorizontalOptions="Center" Spacing="40">
+        <shadcn:SBorder HorizontalOptions="Center" VerticalOptions="Center" BackgroundColor="Blue" CornerRadius="40" Stroke="Red" StrokeThickness="1">
+            <Label Text="test" HeightRequest="400" WidthRequest="400"/>
+        </shadcn:SBorder>
+        <Border BackgroundColor="ForestGreen" StrokeShape="RoundRectangle 40" Stroke="Red" StrokeThickness="1" HeightRequest="400" WidthRequest="400">
+            <Label Text="test" />
+        </Border>
+    </HorizontalStackLayout>
+</ContentPage>
