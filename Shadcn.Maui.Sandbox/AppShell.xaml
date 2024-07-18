@@ -15,5 +15,6 @@
         <ShellContent Route="AlertPage" Title="Alert" ContentTemplate="{DataTemplate pages:AlertPage}"/>
         <ShellContent Route="SBorderPage" Title="SBorder" ContentTemplate="{DataTemplate pages:SBorderPage}"/>
         <ShellContent Route="SAlertDialogPage" Title="SAlertDialog" ContentTemplate="{DataTemplate pages:SAlertDialogPage}"/>
+        <ShellContent Route="SAspectRatioPage" Title="SAspectRatio" ContentTemplate="{DataTemplate pages:SAspectRatioPage}"/>
     </TabBar>
 </Shell>

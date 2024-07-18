@@ -41,7 +41,7 @@ abstract class Selector
         var t = element.GetType();
         while (t != typeof(BindableObject))
         {
-            list.Add(t.Name);
+            list.Add(t!.Name);
             t = t.BaseType;
         }
         return list.ToArray();
@@ -50,7 +50,7 @@ abstract class Selector
     public static Selector Parse(StringReader reader, char stopChar = '\0')
     {
         Selector root = All, workingRoot = All;
-        Operator workingRootParent = null;
+        Operator? workingRootParent = null;
         Action<Operator, Selector> setCurrentSelector = (op, sel) => SetCurrentSelector(ref root, ref workingRoot, ref workingRootParent, op, sel);
 
         int p;
@@ -169,7 +169,7 @@ abstract class Selector
         return root;
     }
 
-    static void SetCurrentSelector(ref Selector root, ref Selector workingRoot, ref Operator workingRootParent, Operator op, Selector sel)
+    static void SetCurrentSelector(ref Selector root, ref Selector workingRoot, ref Operator? workingRootParent, Operator op, Selector sel)
     {
         var updateRoot = root == workingRoot;
 
