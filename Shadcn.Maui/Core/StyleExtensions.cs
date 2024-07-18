@@ -20,9 +20,23 @@ public static class StyleExtensions
         return visualState;
     }
 
-    public static Style<T> SetPointerOverVisualState<T>(this Style<T> style, params (BindableProperty property, object value)[] setters)
+    private static VisualState Add<T>(this VisualState visualState, Style<T> style)
         where T : BindableObject
     {
+        foreach (var setter in style.MauiStyle.Setters)
+        {
+            visualState.Setters.Add(setter);
+        }
+
+        return visualState;
+    }
+
+    public static Style<T> SetPointerOverVisualState<T>(this Style<T> style, Action<Style<T>> configure)
+        where T : BindableObject
+    {
+        var proxyStyle = new Style<T>();
+        configure(proxyStyle);
+
         style.Add(VisualStateManager.VisualStateGroupsProperty, new VisualStateGroupList
         {
             new VisualStateGroup
@@ -49,7 +63,7 @@ public static class StyleExtensions
                     new VisualState
                     {
                         Name = "PointerOver",
-                    }.Add(setters),
+                    }.Add(proxyStyle)
                 }
             }
         });

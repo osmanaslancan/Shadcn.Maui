@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:shadcn="clr-namespace:Shadcn.Maui.Controls;assembly=Shadcn.Maui"
+             x:Class="Shadcn.Maui.Sandbox.Pages.SBadgePage"
+             BackgroundColor="{StaticResource DarkBackground}"
+             Title="SBdgePage">
+    <ContentPage.Resources>
+        <Style TargetType="shadcn:SBadge">
+            <Setter Property="HorizontalOptions" Value="Center"/>
+        </Style>
+    </ContentPage.Resources>
+    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="15" BackgroundColor="{StaticResource DarkBackground}"> 
+        <shadcn:SBadge>
+            <Label>Badge</Label>
+        </shadcn:SBadge>
+        <shadcn:SBadge Variant="Secondary">
+            <Label>Secondary</Label>
+        </shadcn:SBadge>
+        <shadcn:SBadge Variant="Destructive">
+            <Label>Destructive</Label>
+        </shadcn:SBadge>
+        <shadcn:SBadge Variant="Outline">
+            <Label>Outline</Label>
+        </shadcn:SBadge>
+    </VerticalStackLayout>
+</ContentPage>

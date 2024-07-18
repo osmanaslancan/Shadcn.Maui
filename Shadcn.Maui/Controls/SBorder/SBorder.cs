@@ -6,46 +6,43 @@ public class SBorder : ContentView
 {
     /// <summary>Bindable property for <see cref="Fill"/>.</summary>
     public static readonly BindableProperty FillProperty =
-            BindableProperty.Create(nameof(Fill), typeof(Brush), typeof(Shape), null);
+            BindableProperty.Create(nameof(Fill), typeof(Brush), typeof(SBorder), null);
 
     /// <summary>Bindable property for <see cref="Stroke"/>.</summary>
     public static readonly BindableProperty StrokeProperty =
-        BindableProperty.Create(nameof(Stroke), typeof(Brush), typeof(Shape), null);
+        BindableProperty.Create(nameof(Stroke), typeof(Brush), typeof(SBorder), null);
 
     /// <summary>Bindable property for <see cref="StrokeThickness"/>.</summary>
     public static readonly BindableProperty StrokeThicknessProperty =
-        BindableProperty.Create(nameof(StrokeThickness), typeof(double), typeof(Shape), 1.0);
+        BindableProperty.Create(nameof(StrokeThickness), typeof(double), typeof(SBorder), 1.0);
 
     /// <summary>Bindable property for <see cref="StrokeDashArray"/>.</summary>
     public static readonly BindableProperty StrokeDashArrayProperty =
-        BindableProperty.Create(nameof(StrokeDashArray), typeof(DoubleCollection), typeof(Shape), null,
+        BindableProperty.Create(nameof(StrokeDashArray), typeof(DoubleCollection), typeof(SBorder), null,
             defaultValueCreator: bindable => new DoubleCollection());
 
     /// <summary>Bindable property for <see cref="StrokeDashOffset"/>.</summary>
     public static readonly BindableProperty StrokeDashOffsetProperty =
-        BindableProperty.Create(nameof(StrokeDashOffset), typeof(double), typeof(Shape), 0.0);
+        BindableProperty.Create(nameof(StrokeDashOffset), typeof(double), typeof(SBorder), 0.0);
 
     /// <summary>Bindable property for <see cref="StrokeLineCap"/>.</summary>
     public static readonly BindableProperty StrokeLineCapProperty =
-        BindableProperty.Create(nameof(StrokeLineCap), typeof(PenLineCap), typeof(Shape), PenLineCap.Flat);
+        BindableProperty.Create(nameof(StrokeLineCap), typeof(PenLineCap), typeof(SBorder), PenLineCap.Flat);
 
     /// <summary>Bindable property for <see cref="StrokeLineJoin"/>.</summary>
     public static readonly BindableProperty StrokeLineJoinProperty =
-        BindableProperty.Create(nameof(StrokeLineJoin), typeof(PenLineJoin), typeof(Shape), PenLineJoin.Miter);
+        BindableProperty.Create(nameof(StrokeLineJoin), typeof(PenLineJoin), typeof(SBorder), PenLineJoin.Miter);
 
     /// <summary>Bindable property for <see cref="StrokeMiterLimit"/>.</summary>
     public static readonly BindableProperty StrokeMiterLimitProperty =
-        BindableProperty.Create(nameof(StrokeMiterLimit), typeof(double), typeof(Shape), 10.0);
+        BindableProperty.Create(nameof(StrokeMiterLimit), typeof(double), typeof(SBorder), 10.0);
 
     public static new readonly BindableProperty BackgroundProperty =
         BindableProperty.Create(nameof(Background), typeof(Brush), typeof(SBorder), Brush.Default);
 
-    public new Brush Background
-    {
-        get => (Brush)GetValue(BackgroundProperty);
-        set => SetValue(BackgroundProperty, value);
-    }
-
+    public static new readonly BindableProperty PaddingProperty =
+        BindableProperty.Create(nameof(Padding), typeof(Thickness), typeof(SBorder), Thickness.Zero);
+    
     public static new readonly BindableProperty BackgroundColorProperty =
         BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(SBorder), null,
             propertyChanged: (bindableObject, oldValue, newValue) =>
@@ -55,6 +52,13 @@ public class SBorder : ContentView
             });
     public static readonly BindableProperty CornerRadiusProperty =
             BindableProperty.Create(nameof(CornerRadius), typeof(CornerRadius), typeof(SBorder), new CornerRadius());
+
+
+    public new Brush Background
+    {
+        get => (Brush)GetValue(BackgroundProperty);
+        set => SetValue(BackgroundProperty, value);
+    }
 
     public new Color BackgroundColor
     {
@@ -116,6 +120,12 @@ public class SBorder : ContentView
         set => SetValue(StrokeProperty, value);
     }
 
+    public new Thickness Padding
+    {
+        get => (Thickness)GetValue(PaddingProperty);
+        set => SetValue(PaddingProperty, value);
+    }
+
     public CornerRadius CornerRadius
     {
         get => (CornerRadius)GetValue(CornerRadiusProperty);
@@ -127,20 +137,20 @@ public class SBorder : ContentView
         return Application.Current!.Resources[color];
     }
 
-    private void BindToBackground(RoundRectangle background)
+    private void BindToBackground(RoundRectangle background, Border realBorder)
     {
-        background.Bind(RoundRectangle.HeightRequestProperty, "Content.Height", source: this)
-            .Bind(RoundRectangle.WidthRequestProperty, "Content.Width", source: this)
+        background.Bind(RoundRectangle.HeightRequestProperty, "Height", source: realBorder)
+            .Bind(RoundRectangle.WidthRequestProperty, "Width", source: realBorder)    
             .Bind(RoundRectangle.CornerRadiusProperty, nameof(CornerRadius), source: this)
             .Bind(RoundRectangle.FillProperty, nameof(Background), source: this)
             .Bind(RoundRectangle.StrokeProperty, nameof(Background), source: this);
 
     }
 
-    private void BindToBorder(RoundRectangle border)
+    private void BindToBorder(RoundRectangle border, Border realBorder)
     {
-        border.Bind(RoundRectangle.HeightRequestProperty, "Content.Height", source: this)
-            .Bind(RoundRectangle.WidthRequestProperty, "Content.Width", source: this)
+        border.Bind(RoundRectangle.HeightRequestProperty, "Height", source: realBorder)
+            .Bind(RoundRectangle.WidthRequestProperty, "Width", source: realBorder)
             .Bind(RoundRectangle.CornerRadiusProperty, nameof(CornerRadius), source: this)
             .Bind(RoundRectangle.StrokeProperty, nameof(Stroke), source: this)
             .Bind(RoundRectangle.StrokeThicknessProperty, nameof(StrokeThickness), source: this)
@@ -173,12 +183,14 @@ public class SBorder : ContentView
                         StrokeShape = new RoundRectangle()
                             .Bind(RoundRectangle.CornerRadiusProperty, nameof(CornerRadius), source: this),
                         Content = new ContentPresenter(),
-                    },
+                    }
+                    .Bind(Border.PaddingProperty, nameof(Padding), source: this)
+                    .Assign(out Border realBorder),
                 }
             };
 
-            BindToBackground(background);
-            BindToBorder(border);
+            BindToBackground(background, realBorder);
+            BindToBorder(border, realBorder);
 
             return result;
         });

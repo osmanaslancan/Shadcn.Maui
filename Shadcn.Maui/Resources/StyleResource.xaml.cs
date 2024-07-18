@@ -4,6 +4,7 @@ using Microsoft.Maui.Controls.Shapes;
 using Microsoft.Maui.Layouts;
 using Shadcn.Maui.Behaviors;
 using Shadcn.Maui.Controls;
+using Shadcn.Maui.Core;
 using System.Diagnostics;
 
 namespace Shadcn.Maui.Resources;
@@ -17,6 +18,7 @@ public partial class StyleResource : ResourceDictionary
         RegisterSCardStyles();
         RegisterSAlertDialogStyles();
         RegisterSAvatarStyles();
+        RegisterSBadgeStyles();
     }
 
     private Color GetColor(string color)
@@ -120,5 +122,47 @@ public partial class StyleResource : ResourceDictionary
             .Add(SAvatar.BorderWidthProperty, 0)
             .Add(SAvatar.FontFamilyProperty, "Geist")
             .AddAppThemeBinding(SAvatar.BackgroundColorProperty, GetColor("Muted"), GetColor("DarkMuted")));
+    }
+
+    private void RegisterSBadgeStyles()
+    {
+        RegisterStyle(NewStyle<SBadge>("SBadge")
+            .Add(SBadge.CornerRadiusProperty, new CornerRadius(99999))
+            .Add(SBadge.PaddingProperty, new Thickness(10,2)));
+
+        RegisterSelectorStyle<Label>(".Shadcn-SBadge>Label")
+            .Add(Label.FontSizeProperty, 14)
+            .Add(Label.FontFamilyProperty, "GeistSemiBold");
+
+        RegisterStyle(NewStyle<SBadge>("SBadge-Primary")
+            .AddAppThemeBinding(SBadge.BackgroundColorProperty, GetColor("Primary"), GetColor("DarkPrimary"))
+            .SetPointerOverVisualState((style) => style
+                .AddAppThemeBinding(SBadge.BackgroundColorProperty, GetColor("Primary80"), GetColor("DarkPrimary80"))));
+
+        RegisterSelectorStyle<Label>(".Shadcn-SBadge-Primary>Label")
+            .AddAppThemeBinding(Label.TextColorProperty, GetColor("PrimaryForeground"), GetColor("DarkPrimaryForeground"));
+
+        RegisterStyle(NewStyle<SBadge>("SBadge-Secondary")
+            .AddAppThemeBinding(SBadge.BackgroundColorProperty, GetColor("Secondary"), GetColor("DarkSecondary"))
+            .SetPointerOverVisualState((style) => style
+                .AddAppThemeBinding(SBadge.BackgroundColorProperty, GetColor("Secondary80"), GetColor("DarkSecondary80"))));
+
+        RegisterSelectorStyle<Label>(".Shadcn-SBadge-Secondary>Label")
+            .AddAppThemeBinding(Label.TextColorProperty, GetColor("SecondaryForeground"), GetColor("DarkSecondaryForeground"));
+
+        RegisterStyle(NewStyle<SBadge>("SBadge-Destructive")
+            .AddAppThemeBinding(SBadge.BackgroundColorProperty, GetColor("Destructive"), GetColor("DarkDestructive"))
+            .SetPointerOverVisualState((style) => style
+                .AddAppThemeBinding(SBadge.BackgroundColorProperty, GetColor("Destructive80"), GetColor("DarkDestructive80"))));
+
+        RegisterSelectorStyle<Label>(".Shadcn-SBadge-Destructive>Label")
+            .AddAppThemeBinding(Label.TextColorProperty, GetColor("DestructiveForeground"), GetColor("DarkDestructiveForeground"));
+
+        RegisterStyle(NewStyle<SBadge>("SBadge-Outline")
+            .Add(SBadge.BackgroundColorProperty, Colors.Transparent)
+            .AddAppThemeBinding(SBadge.StrokeProperty, GetColor("Border"), GetColor("DarkBorder")));
+
+        RegisterSelectorStyle<Label>(".Shadcn-SBadge-Outline>Label")
+            .AddAppThemeBinding(Label.TextColorProperty, GetColor("Foreground"), GetColor("DarkForeground"));
     }
 }
