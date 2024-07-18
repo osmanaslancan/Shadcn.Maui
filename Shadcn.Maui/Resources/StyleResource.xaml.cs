@@ -16,6 +16,7 @@ public partial class StyleResource : ResourceDictionary
         InitializeComponent();
         RegisterSCardStyles();
         RegisterSAlertDialogStyles();
+        RegisterSAvatarStyles();
     }
 
     private Color GetColor(string color)
@@ -111,5 +112,13 @@ public partial class StyleResource : ResourceDictionary
 
     private void RegisterSAlertDialogStyles()
     {
+    }
+
+    private void RegisterSAvatarStyles()
+    {
+        RegisterStyle(NewStyle<SAvatar>("SAvatar")
+            .Add(SAvatar.BorderWidthProperty, 0)
+            .Add(SAvatar.FontFamilyProperty, "Geist")
+            .AddAppThemeBinding(SAvatar.BackgroundColorProperty, GetColor("Muted"), GetColor("DarkMuted")));
     }
 }
