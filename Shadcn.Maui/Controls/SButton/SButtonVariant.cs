@@ -1,7 +1,7 @@
 ﻿
 namespace Shadcn.Maui.Controls;
 
-public enum ButtonVariant
+public enum SButtonVariant
 {
     Primary,
     Secondary,

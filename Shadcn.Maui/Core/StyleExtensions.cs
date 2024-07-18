@@ -30,6 +30,21 @@ public static class StyleExtensions
 
         return visualState;
     }
+    public static Trigger Add(this Trigger trigger, BindableProperty property, object value)
+    {
+        trigger.Setters.Add(property, value);
+        return trigger;
+    }
+
+    public static Trigger Add(this Trigger trigger, params (BindableProperty property, object value)[] setters)
+    {
+        foreach (var (property, value) in setters)
+        {
+            trigger.Add(property, value);
+        }
+
+        return trigger;
+    }
 
     public static Style<T> SetPointerOverVisualState<T>(this Style<T> style, Action<Style<T>> configure)
         where T : BindableObject

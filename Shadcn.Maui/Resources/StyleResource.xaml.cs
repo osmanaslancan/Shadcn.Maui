@@ -19,6 +19,7 @@ public partial class StyleResource : ResourceDictionary
         RegisterSAlertDialogStyles();
         RegisterSAvatarStyles();
         RegisterSBadgeStyles();
+        RegisterSButtonStyles();
     }
 
     private Color GetColor(string color)
@@ -164,5 +165,50 @@ public partial class StyleResource : ResourceDictionary
 
         RegisterSelectorStyle<Label>(".Shadcn-SBadge-Outline>Label")
             .AddAppThemeBinding(Label.TextColorProperty, GetColor("Foreground"), GetColor("DarkForeground"));
+    }
+
+    private void RegisterSButtonStyles()
+    {
+        RegisterStyle(NewStyle<SButton>("SButton")
+            .Add(new Trigger(typeof(SButton)) { Property = SButton.IsEnabledProperty, Value = false }
+                .Add(SButton.OpacityProperty, 0.5))
+            .Add(CursorPointerBehavior.CursorPointerProperty, true)
+            .Add(SButton.FontSizeProperty, 14)
+            .Add(SButton.FontFamilyProperty, "GeistMedium"));
+
+        RegisterStyle(NewStyle<SButton>("SButton-Primary")
+            .AddAppThemeBinding(SButton.BackgroundColorProperty, GetColor("Primary"), GetColor("DarkPrimary"))
+            .AddAppThemeBinding(SButton.TextColorProperty, GetColor("PrimaryForeground"), GetColor("DarkPrimaryForeground"))
+            .SetPointerOverVisualState((style) => style
+                .AddAppThemeBinding(SButton.BackgroundColorProperty, GetColor("Primary90"), GetColor("DarkPrimary90"))));
+
+        RegisterStyle(NewStyle<SButton>("SButton-Secondary")
+            .AddAppThemeBinding(SButton.BackgroundColorProperty, GetColor("Secondary"), GetColor("DarkSecondary"))
+            .AddAppThemeBinding(SButton.TextColorProperty, GetColor("SecondaryForeground"), GetColor("DarkSecondaryForeground"))
+            .SetPointerOverVisualState((style) => style
+                .AddAppThemeBinding(SButton.BackgroundColorProperty, GetColor("Secondary80"), GetColor("DarkSecondary80"))));
+
+        RegisterStyle(NewStyle<SButton>("SButton-Destructive")
+            .AddAppThemeBinding(SButton.BackgroundColorProperty, GetColor("Destructive"), GetColor("DarkDestructive"))
+            .AddAppThemeBinding(SButton.TextColorProperty, GetColor("DestructiveForeground"), GetColor("DarkDestructiveForeground"))
+            .SetPointerOverVisualState((style) => style
+                .AddAppThemeBinding(SButton.BackgroundColorProperty, GetColor("Destructive90"), GetColor("DarkDestructive90"))));
+
+        RegisterStyle(NewStyle<SButton>("SButton-Outline")
+            .AddAppThemeBinding(SButton.BackgroundColorProperty, GetColor("Background"), GetColor("DarkBackground"))
+            .AddAppThemeBinding(SButton.TextColorProperty, GetColor("Primary"), GetColor("DarkPrimary"))
+            .SetPointerOverVisualState((style) => style
+                .AddAppThemeBinding(SButton.BackgroundColorProperty, GetColor("Accent"), GetColor("DarkAccent"))
+                .AddAppThemeBinding(SButton.TextColorProperty, GetColor("AccentForeground"), GetColor("DarkAccentForeground"))));
+
+        RegisterStyle(NewStyle<SButton>("SButton-Ghost")
+            .AddAppThemeBinding(SButton.BackgroundColorProperty, Colors.Transparent, Colors.Transparent)
+            .AddAppThemeBinding(SButton.TextColorProperty, GetColor("Primary"), GetColor("DarkPrimary"))
+            .Add(SButton.BorderWidthProperty, 0)
+            .SetPointerOverVisualState((style) => style
+                .AddAppThemeBinding(SButton.BackgroundColorProperty, GetColor("Accent"), GetColor("DarkAccent"))
+                .AddAppThemeBinding(SButton.TextColorProperty, GetColor("AccentForeground"), GetColor("DarkAccentForeground"))));
+
+
     }
 }
