@@ -20,6 +20,7 @@ public partial class StyleResource : ResourceDictionary
         RegisterSAvatarStyles();
         RegisterSBadgeStyles();
         RegisterSButtonStyles();
+        RegisterSDatePickerStyles();
     }
 
     private Color GetColor(string color)
@@ -208,7 +209,16 @@ public partial class StyleResource : ResourceDictionary
             .SetPointerOverVisualState((style) => style
                 .AddAppThemeBinding(SButton.BackgroundColorProperty, GetColor("Accent"), GetColor("DarkAccent"))
                 .AddAppThemeBinding(SButton.TextColorProperty, GetColor("AccentForeground"), GetColor("DarkAccentForeground"))));
+    }
 
-
+    private void RegisterSDatePickerStyles()
+    {
+        RegisterStyle(NewStyle<SDatePicker>("SDatePicker")
+            .AddAppThemeBinding(SDatePicker.BackgroundColorProperty, GetColor("Background"), GetColor("DarkBackground"))
+            .Add(
+                (CursorPointerBehavior.CursorPointerProperty, true),
+                (SDatePicker.FontFamilyProperty, "GeistRegular"))
+            .SetPointerOverVisualState((style) => style
+                .AddAppThemeBinding(SDatePicker.BackgroundColorProperty, GetColor("Background90"), GetColor("DarkBackground90"))));
     }
 }

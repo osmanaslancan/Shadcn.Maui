@@ -18,5 +18,6 @@
         <ShellContent Route="SAspectRatioPage" Title="SAspectRatio" ContentTemplate="{DataTemplate pages:SAspectRatioPage}"/>
         <ShellContent Route="SAvatarPage" Title="SAvatar" ContentTemplate="{DataTemplate pages:SAvatarPage}"/>
         <ShellContent Route="SBadgePage" Title="SBadge" ContentTemplate="{DataTemplate pages:SBadgePage}"/>
+        <ShellContent Route="SDatePickerPage" Title="SDatePicker" ContentTemplate="{DataTemplate pages:SDatePickerPage}"/>
     </TabBar>
 </Shell>
