@@ -52,7 +52,7 @@
                                     <TapGestureRecognizer Command="{TemplateBinding ToggleCommand}"/>
                                 </FlexLayout.GestureRecognizers>
                                 <ContentView class="SAccordionItem-Trigger" Content="{TemplateBinding TriggerTemplateView}"/>
-                                <local:SIcon AnchorX="0.6" AnchorY="0.3" HorizontalOptions="Center" VerticalOptions="Center" class="SAccordion-Chevron" Size="16" Icon="{StaticResource IconChevronDown}">
+                                <local:SIcon AnchorX="0.6" AnchorY="0.3" HorizontalOptions="Center" VerticalOptions="Center" class="SAccordion-Chevron" Size="50" Icon="{StaticResource IconChevronDown}">
                                     <local:SIcon.Style>
                                         <Style TargetType="local:SIcon">
                                             <Style.Triggers>

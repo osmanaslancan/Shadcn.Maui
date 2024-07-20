@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:shadcn="clr-namespace:Shadcn.Maui.Controls;assembly=Shadcn.Maui"
+             x:Class="Shadcn.Maui.Sandbox.Pages.SCollapsiblePage"
+             Title="SCollapsiblePage">
+    <ContentPage.Resources>
+        <Style TargetType="shadcn:SLabel">
+            <Setter Property="FontFamily" Value="GeistMedium" />
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+    </ContentPage.Resources>
+    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+        <shadcn:SCollapsible>
+            <VerticalStackLayout>
+                <HorizontalStackLayout>
+                    <shadcn:SLabel VerticalOptions="Center" Margin="15" Text="@peduarte starred 3 repositories"/>
+                    <shadcn:SCollapsibleTrigger Margin="15">
+                        <shadcn:SButton Variant="Ghost" Text="{StaticResource IconChevronsUpDown}" FontFamily="Lucide" FontSize="18" HeightRequest="40" WidthRequest="40" />
+                    </shadcn:SCollapsibleTrigger>
+                </HorizontalStackLayout>
+                <shadcn:SCard Margin="0,0,0,10">
+                    <shadcn:SLabel WidthRequest="300" Padding="15" Text="@radix-ui/primitives"/>
+                </shadcn:SCard>
+                <shadcn:SCollapsibleContent>
+                    <VerticalStackLayout>
+                        <shadcn:SCard Margin="0,0,0,10" >
+                            <shadcn:SLabel WidthRequest="300" Padding="15" Text="@radix-ui/colors"/>
+                        </shadcn:SCard>
+                        <shadcn:SCard Margin="0,0,0,10">
+                            <shadcn:SLabel WidthRequest="300" Padding="15" Text="@stitches/react"/>
+                        </shadcn:SCard>
+                    </VerticalStackLayout>
+                </shadcn:SCollapsibleContent>
+            </VerticalStackLayout>
+        </shadcn:SCollapsible>
+    </VerticalStackLayout>
+</ContentPage>
