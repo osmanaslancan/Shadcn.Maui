@@ -15,6 +15,7 @@
             <Style TargetType="ContentPage" ApplyToDerivedTypes="True">
                 <Setter Property="NavigationPage.HasNavigationBar" Value="False"/>
                 <Setter Property="Shell.NavBarIsVisible" Value="False"/>
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Background}, Dark={StaticResource DarkBackground}}" />
             </Style>
         </ResourceDictionary>
     </Application.Resources>

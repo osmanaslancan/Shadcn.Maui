@@ -21,6 +21,7 @@ public partial class StyleResource : ResourceDictionary
         RegisterSBadgeStyles();
         RegisterSButtonStyles();
         RegisterSDatePickerStyles();
+        RegisterSCheckboxStyles();
     }
 
     private Color GetColor(string color)
@@ -220,5 +221,13 @@ public partial class StyleResource : ResourceDictionary
                 (SDatePicker.FontFamilyProperty, "GeistRegular"))
             .SetPointerOverVisualState((style) => style
                 .AddAppThemeBinding(SDatePicker.BackgroundColorProperty, GetColor("Background90"), GetColor("DarkBackground90"))));
+    }
+
+    private void RegisterSCheckboxStyles()
+    {
+        RegisterStyle(NewStyle<SCheckbox>(nameof(SCheckbox))
+            .AddAppThemeBinding(SCheckbox.BackgroundColorProperty, GetColor("Background"), GetColor("DarkBackground"))
+            .AddAppThemeBinding(SCheckbox.ColorProperty, GetColor("Primary"), GetColor("DarkPrimary"))
+            .Add(CursorPointerBehavior.CursorPointerProperty, true));
     }
 }

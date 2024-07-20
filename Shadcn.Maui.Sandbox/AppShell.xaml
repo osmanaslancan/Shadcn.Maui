@@ -19,5 +19,6 @@
         <ShellContent Route="SAvatarPage" Title="SAvatar" ContentTemplate="{DataTemplate pages:SAvatarPage}"/>
         <ShellContent Route="SBadgePage" Title="SBadge" ContentTemplate="{DataTemplate pages:SBadgePage}"/>
         <ShellContent Route="SDatePickerPage" Title="SDatePicker" ContentTemplate="{DataTemplate pages:SDatePickerPage}"/>
+        <ShellContent Route="SCheckboxPage" Title="SCheckbox" ContentTemplate="{DataTemplate pages:SCheckboxPage}"/>
     </TabBar>
 </Shell>

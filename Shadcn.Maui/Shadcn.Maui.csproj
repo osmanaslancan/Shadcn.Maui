@@ -64,28 +64,10 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <MauiXaml Update="Resources\ShadcnColors.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Resources\Icons.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Resources\StyleResource.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	</ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Platforms\Android\" />
     <Folder Include="Platforms\iOS\" />
     <Folder Include="Platforms\MacCatalyst\" />
     <Folder Include="Platforms\Tizen\" />
     <Folder Include="Platforms\Windows\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Resources\ShadcnColors.xaml.cs">
-      <DependentUpon>ShadcnColors.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
 </Project>
