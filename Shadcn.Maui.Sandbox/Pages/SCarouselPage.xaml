@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sys="clr-namespace:System.Collections;assembly=mscorlib"
+             xmlns:shadcn="clr-namespace:Shadcn.Maui.Controls;assembly=Shadcn.Maui"
+             x:Class="Shadcn.Maui.Sandbox.Pages.SCarouselPage"
+             Title="SCarouselPage">
+    <Border HorizontalOptions="Center" VerticalOptions="Center" HeightRequest="400" WidthRequest="450">
+        <shadcn:SCarousel>
+            <shadcn:SCarousel.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Item 1</x:String>
+                    <x:String>Item 2</x:String>
+                    <x:String>Item 3</x:String>
+                </x:Array>
+            </shadcn:SCarousel.ItemsSource>
+            <shadcn:SCarousel.ItemTemplate>
+                <DataTemplate>
+                    <Border BackgroundColor="Red">
+                        <Label 
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            FontSize="Large"
+                            Text="{Binding}"/>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer NumberOfTapsRequired="1"></TapGestureRecognizer>
+                        </Border.GestureRecognizers>
+                    </Border>
+                </DataTemplate>
+            </shadcn:SCarousel.ItemTemplate>
+        </shadcn:SCarousel>
+    </Border>
+</ContentPage>

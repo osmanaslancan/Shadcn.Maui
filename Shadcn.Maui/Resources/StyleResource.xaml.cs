@@ -21,6 +21,7 @@ public partial class StyleResource : ResourceDictionary
         RegisterSBadgeStyles();
         RegisterSButtonStyles();
         RegisterSDatePickerStyles();
+        RegisterSCarouselStyles();
     }
 
     private Color GetColor(string color)
@@ -220,5 +221,27 @@ public partial class StyleResource : ResourceDictionary
                 (SDatePicker.FontFamilyProperty, "GeistRegular"))
             .SetPointerOverVisualState((style) => style
                 .AddAppThemeBinding(SDatePicker.BackgroundColorProperty, GetColor("Background90"), GetColor("DarkBackground90"))));
+    }
+
+    private void RegisterSCarouselStyles()
+    {
+        RegisterStyle(NewStyle<SBorder>("SCarousel-Button")
+            .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Background"), GetColor("DarkBackground"))
+            .AddAppThemeBinding(SBorder.StrokeProperty, GetColor("Border"), GetColor("DarkBorder"))
+            .Add(SBorder.CornerRadiusProperty, 999999)
+            .Add(SBorder.VerticalOptionsProperty, LayoutOptions.Center)
+            .Add(SBorder.HorizontalOptionsProperty, LayoutOptions.Center)
+            .Add(SBorder.PaddingProperty, 4)
+            .Add(SBorder.MarginProperty, 0)
+            .Add(CursorPointerBehavior.CursorPointerProperty, true)
+            );
+
+        RegisterStyle(NewStyle<SIcon>("SCarousel-ButtonIcon")
+            .Add(SIcon.VerticalOptionsProperty, LayoutOptions.Center)
+            .Add(SIcon.HorizontalOptionsProperty, LayoutOptions.Center)
+            .Add(SIcon.SizeProperty, 40)
+            .Add(SIcon.TranslationXProperty, -2)
+            .Add(SIcon.TranslationYProperty, 2));
+
     }
 }
