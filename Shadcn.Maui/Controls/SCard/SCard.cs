@@ -16,6 +16,15 @@ public partial class SCard : ContentView
         set => SetValue(ChildrenProperty, value);
     }
 
+    public static new readonly BindableProperty PaddingProperty =
+        BindableProperty.Create(nameof(Padding), typeof(Thickness), typeof(SCard), default(Thickness));
+
+    public new Thickness Padding
+    {
+        get => (Thickness)GetValue(PaddingProperty);
+        set => SetValue(PaddingProperty, value);
+    }
+
     public SCard()
     {
         StyleClass = ["Shadcn-SCard"];

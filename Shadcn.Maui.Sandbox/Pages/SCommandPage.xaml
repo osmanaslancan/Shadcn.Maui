@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:shadcn="clr-namespace:Shadcn.Maui.Controls;assembly=Shadcn.Maui"
+             x:Class="Shadcn.Maui.Sandbox.Pages.SCommandPage"
+             Title="SCommandPage">
+    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+        <shadcn:SCommand WidthRequest="400">
+            <shadcn:SCommandInput Placeholder="Type a command or search..."/>
+            <shadcn:SCommandGroup Heading="Suggestions">
+                <shadcn:SCommandItem>
+                    <shadcn:SIcon Icon="{StaticResource IconCalendar}"/>
+                    <shadcn:SLabel Text="Calendar"/>
+                </shadcn:SCommandItem>
+                <shadcn:SCommandItem>
+                    <shadcn:SIcon Icon="{StaticResource IconSmile}"/>
+                    <shadcn:SLabel Text="Search Emoji"/>
+                </shadcn:SCommandItem>
+                <shadcn:SCommandItem>
+                    <shadcn:SIcon Icon="{StaticResource IconCalculator}"/>
+                    <shadcn:SLabel Text="Calculator"/>
+                </shadcn:SCommandItem>
+            </shadcn:SCommandGroup>
+            <shadcn:SCommandSeparator/>
+            <shadcn:SCommandGroup Heading="Settings">
+                <shadcn:SCommandItem>
+                    <shadcn:SIcon Icon="{StaticResource IconUser}"/>
+                    <shadcn:SLabel Text="Profile"/>
+                </shadcn:SCommandItem>
+                <shadcn:SCommandItem>
+                    <shadcn:SIcon Icon="{StaticResource IconCreditCard}"/>
+                    <shadcn:SLabel Text="Billing"/>
+                </shadcn:SCommandItem>
+                <shadcn:SCommandItem>
+                    <shadcn:SIcon Icon="{StaticResource IconSettings}"/>
+                    <shadcn:SLabel Text="Settings"/>
+                </shadcn:SCommandItem>
+            </shadcn:SCommandGroup>
+        </shadcn:SCommand>
+    </VerticalStackLayout>
+</ContentPage>

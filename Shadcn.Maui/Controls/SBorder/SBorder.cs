@@ -42,7 +42,7 @@ public class SBorder : ContentView
 
     public static new readonly BindableProperty PaddingProperty =
         BindableProperty.Create(nameof(Padding), typeof(Thickness), typeof(SBorder), Thickness.Zero);
-    
+
     public static new readonly BindableProperty BackgroundColorProperty =
         BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(SBorder), null,
             propertyChanged: (bindableObject, oldValue, newValue) =>
@@ -137,20 +137,20 @@ public class SBorder : ContentView
         return Application.Current!.Resources[color];
     }
 
-    private void BindToBackground(RoundRectangle background, Border realBorder)
+    private void BindToBackground(RoundRectangle background, VisualElement realBorder)
     {
-        background.Bind(RoundRectangle.HeightRequestProperty, "Height", source: realBorder)
-            .Bind(RoundRectangle.WidthRequestProperty, "Width", source: realBorder)    
+        background.Bind(RoundRectangle.HeightRequestProperty, nameof(VisualElement.Height), source: realBorder)
+            .Bind(RoundRectangle.WidthRequestProperty, nameof(VisualElement.Width), source: realBorder)
             .Bind(RoundRectangle.CornerRadiusProperty, nameof(CornerRadius), source: this)
             .Bind(RoundRectangle.FillProperty, nameof(Background), source: this)
             .Bind(RoundRectangle.StrokeProperty, nameof(Background), source: this);
 
     }
 
-    private void BindToBorder(RoundRectangle border, Border realBorder)
+    private void BindToBorder(RoundRectangle border, VisualElement realBorder)
     {
-        border.Bind(RoundRectangle.HeightRequestProperty, "Height", source: realBorder)
-            .Bind(RoundRectangle.WidthRequestProperty, "Width", source: realBorder)
+        border.Bind(RoundRectangle.HeightRequestProperty, nameof(VisualElement.Height), source: realBorder)
+            .Bind(RoundRectangle.WidthRequestProperty, nameof(VisualElement.Width), source: realBorder)
             .Bind(RoundRectangle.CornerRadiusProperty, nameof(CornerRadius), source: this)
             .Bind(RoundRectangle.StrokeProperty, nameof(Stroke), source: this)
             .Bind(RoundRectangle.StrokeThicknessProperty, nameof(StrokeThickness), source: this)
@@ -177,7 +177,6 @@ public class SBorder : ContentView
                     }.Assign(out RoundRectangle border),
                     new Border
                     {
-                        VerticalOptions = LayoutOptions.Start,
                         Background = Colors.Transparent,
                         Stroke = null,
                         StrokeShape = new RoundRectangle()
@@ -185,16 +184,22 @@ public class SBorder : ContentView
                         Content = new ContentPresenter(),
                     }
                     .Bind(Border.PaddingProperty, nameof(Padding), source: this)
-                    .Assign(out Border realBorder),
+                    .Assign(out Border clipper)
                 }
-            };
+            }.Assign(out VisualElement realBorder);
 
             BindToBackground(background, realBorder);
             BindToBorder(border, realBorder);
+            clipper
+             .Bind(Border.HeightRequestProperty, nameof(Height), source: realBorder)
+             .Bind(Border.WidthRequestProperty, nameof(Width), source: realBorder);
 
             return result;
-        });
+        })
+        {
 
+        };
+        StyleClass = ["Shadcn-SBorder"];
 
     }
 }

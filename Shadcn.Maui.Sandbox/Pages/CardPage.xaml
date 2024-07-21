@@ -4,7 +4,7 @@
              xmlns:shadcn="clr-namespace:Shadcn.Maui.Controls;assembly=Shadcn.Maui"
              x:Class="Shadcn.Maui.Sandbox.Pages.CardPage"
              Title="CardPage">
-    <shadcn:SCard WidthRequest="300" VerticalOptions="Center" HorizontalOptions="Center">
+    <shadcn:SCard VerticalOptions="Center" HorizontalOptions="Center">
         <shadcn:SCardHeader>
             <shadcn:SCardTitle>
                 <Label>Create project</Label>

@@ -22,6 +22,8 @@ public partial class StyleResource : ResourceDictionary
         RegisterSButtonStyles();
         RegisterSDatePickerStyles();
         RegisterSCheckboxStyles();
+        RegisterSBorderStyles();
+        RegisterSCommandStyles();
     }
 
     private Color GetColor(string color)
@@ -86,7 +88,8 @@ public partial class StyleResource : ResourceDictionary
                     }.Bind(BindableLayout.ItemsSourceProperty, nameof(SCard.Children), source: RelativeBindingSource.TemplatedParent)
                     .SetBindableValue(BindableLayout.ItemTemplateProperty, new DataTemplate(() => new ContentPresenter().Bind(ContentPresenter.ContentProperty)))
                 }.AppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Card"), GetColor("DarkCard"))
-                .AppThemeBinding(SBorder.StrokeProperty, GetColor("Border"), GetColor("DarkBorder"));
+                .AppThemeBinding(SBorder.StrokeProperty, GetColor("Border"), GetColor("DarkBorder"))
+                .Bind(SBorder.PaddingProperty, nameof(SCard.Padding), source: RelativeBindingSource.TemplatedParent);
             })));
 
         RegisterStyle(NewStyle<StackLayout>("SCard-StackLayout")
@@ -229,5 +232,58 @@ public partial class StyleResource : ResourceDictionary
             .AddAppThemeBinding(SCheckbox.BackgroundColorProperty, GetColor("Background"), GetColor("DarkBackground"))
             .AddAppThemeBinding(SCheckbox.ColorProperty, GetColor("Primary"), GetColor("DarkPrimary"))
             .Add(CursorPointerBehavior.CursorPointerProperty, true));
+    }
+
+    private void RegisterSBorderStyles()
+    {
+        RegisterStyle(NewStyle<SBorder>(nameof(SBorder))
+            .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Card"), GetColor("DarkCard"))
+            .AddAppThemeBinding(SBorder.StrokeProperty, GetColor("Border"), GetColor("DarkBorder"))
+            .Add(SBorder.CornerRadiusProperty, new CornerRadius(6)));
+    }
+
+    private void RegisterSCommandStyles()
+    {
+        RegisterStyle(NewStyle<SCommandInput>("SCommandInput")
+            .Add(SCommandInput.FontFamilyProperty, "GeistRegular")
+            .AddAppThemeBinding(SCommandInput.PlaceholderColorProperty, GetColor("MutedForeground"), GetColor("DarkMutedForeground")));
+
+        RegisterStyle(NewStyle<FlexLayout>("SCommandInput-EntryContainer")
+            .Add(FlexLayout.MarginProperty, new Thickness(10, 15, 10, 10)));
+
+        RegisterStyle(NewStyle<Entry>("SCommandInput-Entry")
+            .Add(EntryExtensionsBehavior.HasUnderLineProperty, false)
+            .Add(Entry.BackgroundColorProperty, Colors.Transparent));
+
+        RegisterStyle(NewStyle<SIcon>("SCommandInput-Icon")
+            .Add(SIcon.MarginProperty, new Thickness(0,0,2,0))
+            .AddAppThemeBinding(SIcon.ColorProperty, GetColor("MutedForeground"), GetColor("DarkMutedForeground")));
+
+        RegisterStyle(NewStyle<SBorder>("SCommandInput-BottomBorder")
+            .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Border"), GetColor("DarkBorder"))
+            .AddAppThemeBinding(SBorder.StrokeProperty, GetColor("Border"), GetColor("DarkBorder")));
+
+        RegisterStyle(NewStyle<SLabel>("SCommandGroup-Heading")
+            .Add(SLabel.FontFamilyProperty, "GeistMedium")
+            .Add(SLabel.PaddingProperty, new Thickness(14, 10))
+            .Add(SLabel.FontSizeProperty, 13)
+            .AddAppThemeBinding(SLabel.TextColorProperty, GetColor("MutedForeground"), GetColor("DarkMutedForeground")));
+
+        RegisterStyle(NewStyle<SCommandItem>("SCommandItem")
+            .Add(SCommandItem.PaddingProperty, new Thickness(14, 10)));
+
+        RegisterStyle(NewStyle<SBorder>("SCommandItem-Border")
+           .BasedOn((Style)this["Shadcn-SBorder"])
+           .Add(SBorder.StrokeProperty, Colors.Transparent)
+           .SetPointerOverVisualState((style) => style
+                .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Accent"), GetColor("DarkAccent"))));
+
+        RegisterSelectorStyle<SLabel>(".Shadcn-SCommandItem>SLabel")
+            .Add(SLabel.FontFamilyProperty, "GeistMedium");
+
+        RegisterStyle(NewStyle<SCommandSeparator>(nameof(SCommandSeparator))
+            .Add(SCommandSeparator.HeightRequestProperty, 1)
+            .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Border"), GetColor("DarkBorder"))
+            .AddAppThemeBinding(SBorder.StrokeProperty, GetColor("Border"), GetColor("DarkBorder")));
     }
 }

@@ -52,7 +52,7 @@ public class SCollapsibleTrigger : ContentView
         }
     }
 
-    protected override void OnPropertyChanging([CallerMemberName] string propertyName = null)
+    protected override void OnPropertyChanging([CallerMemberName] string? propertyName = null)
     {
         base.OnPropertyChanging(propertyName);
         if (propertyName == nameof(Content))
@@ -61,7 +61,7 @@ public class SCollapsibleTrigger : ContentView
         }
     }
 
-    protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    protected override void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         base.OnPropertyChanged(propertyName);
         if (propertyName == nameof(Content))

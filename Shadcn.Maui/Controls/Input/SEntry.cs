@@ -4,7 +4,7 @@ using Shadcn.Maui.Common;
 namespace Shadcn.Maui.Controls;
 
 [WrapsControl(typeof(Entry))]
-public partial class SEntry : ContentView
+public partial class SEntry : TemplatedView
 {
     private readonly Entry _entry;
 
@@ -18,14 +18,15 @@ public partial class SEntry : ContentView
         };
 
         BindWrappedEntry(_entry);
-        Content = new Border
-        {
-            StyleClass = ["SEntry-Ring"],
-            Content = new Border
+        ControlTemplate = new ControlTemplate(() =>
+            new Border
             {
-                StyleClass = ["SEntry-Border"],
-                Content = _entry
-            }
-        };
+                StyleClass = ["SEntry-Ring"],
+                Content = new Border
+                {
+                    StyleClass = ["SEntry-Border"],
+                    Content = _entry
+                }
+            });
     }
 }
