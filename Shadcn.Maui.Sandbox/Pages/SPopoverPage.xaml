@@ -5,13 +5,7 @@
              x:Class="Shadcn.Maui.Sandbox.Pages.SPopoverPage"
              Title="SPopoverPage">
     <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
-        <shadcn:SBorder Padding="10">
-            <FlyoutBase.ContextFlyout>
-                <MenuFlyout>
-                    <MenuFlyoutItem Text="Go to docs repo"/>
-                    <MenuFlyoutItem Text="Go to engineering repo"/>
-                </MenuFlyout>
-            </FlyoutBase.ContextFlyout>
+        <shadcn:SBorder x:Name="border" Padding="10">
             <HorizontalStackLayout Spacing="10">
                 <shadcn:SLabel Text="Select framework..." FontFamily="GeistMedium"/>
                 <shadcn:SIcon HeightRequest="20" WidthRequest="20" Icon="{StaticResource IconChevronsUpDown}"/>

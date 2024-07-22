@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui.Markup;
 using Shadcn.Maui.Core;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Shadcn.Maui.Controls;
 
@@ -37,7 +38,9 @@ public class SCommandGroup : TemplatedView
                     new SLabel
                     {
                         StyleClass = ["Shadcn-SCommandGroup-Heading"],
-                    }.Bind(Label.TextProperty, nameof(Heading), source: this),
+                    }
+                    .Bind(Label.TextProperty, nameof(Heading), source: this)
+                    .Bind(Label.IsVisibleProperty, nameof(Heading), source: this, convert: static (string? Heading) => Heading is not null),
                     new VerticalStackLayout()
                     {
                     }
