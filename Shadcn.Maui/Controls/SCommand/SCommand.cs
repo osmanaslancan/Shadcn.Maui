@@ -12,6 +12,17 @@ public class SCommand : TemplatedView
         typeof(SCommand),
         defaultValueCreator: (BindableObject bindableObject) => new ObservableCollectionEx<View>());
 
+    public static readonly BindableProperty SearchTextProperty = BindableProperty.Create(
+        nameof(SearchText),
+        typeof(string),
+        typeof(SCommand));
+
+    public string SearchText
+    {
+        get { return (string)GetValue(SearchTextProperty); }
+        set { SetValue(SearchTextProperty, value); }
+    }
+
     public new IList<View> Children
     {
         get { return (IList<View>)GetValue(ChildrenProperty); }

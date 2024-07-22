@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Maui.Markup;
 using Shadcn.Maui.Core;
+using System.Collections.Specialized;
+using System.ComponentModel;
 
 namespace Shadcn.Maui.Controls;
 
@@ -27,7 +29,6 @@ public class SCommandItem : TemplatedView
         set => SetValue(PaddingProperty, value);
     }
 
-
     public SCommandItem()
     {
         StyleClass = ["Shadcn-SCommandItem"];
@@ -44,5 +45,16 @@ public class SCommandItem : TemplatedView
                 .SetBindableValue(BindableLayout.ItemTemplateProperty, new DataTemplate(() => new ContentPresenter().Bind(ContentPresenter.ContentProperty)))
             }.Bind(SBorder.PaddingProperty, nameof(Padding), source: this);
         });
+
+        this.Bind(SCommandItem.IsVisibleProperty, binding1: new Binding(".", source: Children), binding2: new Binding(nameof(SCommand.SearchText), source: new RelativeBindingSource(RelativeBindingSourceMode.FindAncestor, typeof(SCommand))),
+            convert: ((IList<View>? Children, string? SearchText) binds) =>
+            {
+                if (string.IsNullOrEmpty(binds.SearchText))
+                {
+                    return true;
+                }
+
+                return binds.Children!.OfType<Label>().Any(label => label.Text.Contains(binds.SearchText, StringComparison.CurrentCultureIgnoreCase));
+            });
     }
 }

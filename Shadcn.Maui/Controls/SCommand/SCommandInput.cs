@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui.Markup;
 using Shadcn.Maui.Common;
+using Shadcn.Maui.Core;
 using Shadcn.Maui.Resources;
 
 namespace Shadcn.Maui.Controls;
@@ -7,6 +8,8 @@ namespace Shadcn.Maui.Controls;
 [WrapsControl(typeof(Entry))]
 public partial class SCommandInput : TemplatedView
 {
+    private Entry? _entry;
+
     public SCommandInput()
     {
         StyleClass = ["Shadcn-SCommandInput"];
@@ -30,7 +33,7 @@ public partial class SCommandInput : TemplatedView
                             new Entry
                             {
                                 StyleClass = ["Shadcn-SCommandInput-Entry"],
-                            }.Invoke(x => BindWrappedEntry(x)).Grow(1)
+                            }.Invoke(x => BindWrappedEntry(x)).Grow(1).Assign(out _entry)
                         }
                     },
                     new SBorder()
@@ -42,5 +45,14 @@ public partial class SCommandInput : TemplatedView
                 }
             };
         });
+
+        Loaded += OnLoaded;
+    }
+
+    private void OnLoaded(object? sender, EventArgs e)
+    {
+        var parentCommand = this.FindParentOfType<SCommand>();
+
+        _entry!.Bind(Entry.TextProperty, nameof(SCommand.SearchText), source: parentCommand, mode: BindingMode.TwoWay);
     }
 }
