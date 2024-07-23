@@ -2,6 +2,7 @@
 using Shadcn.Maui.Core;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Windows.Input;
 
 namespace Shadcn.Maui.Controls;
 
@@ -17,6 +18,16 @@ public class SCommandItem : TemplatedView
     public static new readonly BindableProperty PaddingProperty =
             BindableProperty.Create(nameof(Padding), typeof(Thickness), typeof(SBorder), Thickness.Zero);
 
+    public static readonly BindableProperty CommandProperty = BindableProperty.Create(
+        nameof(Command),
+        typeof(ICommand),
+        typeof(SCommandItem));
+
+    public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create(
+        nameof(CommandParameter),
+        typeof(object),
+        typeof(SCommandItem));
+
     public new IList<View> Children
     {
         get { return (IList<View>)GetValue(ChildrenProperty); }
@@ -27,6 +38,18 @@ public class SCommandItem : TemplatedView
     {
         get => (Thickness)GetValue(PaddingProperty);
         set => SetValue(PaddingProperty, value);
+    }
+
+    public ICommand Command
+    {
+        get => (ICommand)GetValue(CommandProperty);
+        set => SetValue(CommandProperty, value);
+    }
+
+    public object CommandParameter
+    {
+        get => GetValue(CommandParameterProperty);
+        set => SetValue(CommandParameterProperty, value);
     }
 
     public SCommandItem()
@@ -51,7 +74,9 @@ public class SCommandItem : TemplatedView
                         .Bind(ContentView.BindingContextProperty, "BindingContext", source: RelativeBindingSource.TemplatedParent)
                         .Bind(ContentView.ContentProperty, "BindingContext", source: new RelativeBindingSource(RelativeBindingSourceMode.FindAncestor, typeof(ContentView)))
                     }))
-            }.Bind(SBorder.PaddingProperty, nameof(Padding), source: this);
+            }
+            .BindTapGesture(nameof(Command), this, nameof(CommandParameter), this)
+            .Bind(SBorder.PaddingProperty, nameof(Padding), source: this);
         });
 
         this.Bind(SCommandItem.IsVisibleProperty, binding1: new Binding(".", source: Children), binding2: new Binding(nameof(SCommand.SearchText), source: new RelativeBindingSource(RelativeBindingSourceMode.FindAncestor, typeof(SCommand))),
