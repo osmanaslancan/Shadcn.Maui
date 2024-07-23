@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui.Markup;
 using Shadcn.Maui.Core;
+using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
@@ -7,7 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Shadcn.Maui.Controls;
 
 [ContentProperty(nameof(Children))]
-public class SCommandGroup : TemplatedView
+public class SCommandGroup : TemplatedView, IBindableLayout
 {
     public static readonly BindableProperty HeadingProperty = BindableProperty.Create(nameof(Heading), typeof(string), typeof(SCommandGroup), default(string));
     public static readonly BindablePropertyKey ChildrenPropertyKey = BindableProperty.CreateReadOnly(
@@ -27,6 +28,8 @@ public class SCommandGroup : TemplatedView
     {
         get { return (IList<View>)GetValue(ChildrenPropertyKey.BindableProperty); }
     }
+
+    IList IBindableLayout.Children => (ObservableCollectionEx<View>)Children;
 
     public SCommandGroup()
     {

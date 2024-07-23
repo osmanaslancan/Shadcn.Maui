@@ -25,9 +25,8 @@ public static class VisualElementExtensions
         Element current = parent;
         while (current != null)
         {
-            if (current is Page)
+            if (current is Page page)
             {
-                break;
             }
 
             if (current is VisualElement ve)

@@ -24,6 +24,7 @@ public partial class StyleResource : ResourceDictionary
         RegisterSCheckboxStyles();
         RegisterSBorderStyles();
         RegisterSCommandStyles();
+        RegisterSPopoverStyles();
     }
 
     private Color GetColor(string color)
@@ -285,5 +286,13 @@ public partial class StyleResource : ResourceDictionary
             .Add(SCommandSeparator.HeightRequestProperty, 1)
             .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Border"), GetColor("DarkBorder"))
             .AddAppThemeBinding(SBorder.StrokeProperty, GetColor("Border"), GetColor("DarkBorder")));
+    }
+
+    private void RegisterSPopoverStyles()
+    {
+        RegisterStyle(NewStyle<SBorder>("SPopoverTriggerView")
+            .Add(CursorPointerBehavior.CursorPointerProperty, true)
+            .SetPointerOverVisualState((style) => style
+                .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Accent"), GetColor("DarkAccent"))));
     }
 }

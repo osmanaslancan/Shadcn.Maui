@@ -41,8 +41,16 @@ public class SCommandItem : TemplatedView
                 {
                     Spacing = 10,
                 }
-                .Bind(BindableLayout.ItemsSourceProperty, nameof(Children), source: this)
-                .SetBindableValue(BindableLayout.ItemTemplateProperty, new DataTemplate(() => new ContentPresenter().Bind(ContentPresenter.ContentProperty)))
+                .Bind(BindableLayout.ItemsSourceProperty, nameof(Children), source: RelativeBindingSource.TemplatedParent)
+                .SetBindableValue(BindableLayout.ItemTemplateProperty,
+                    new DataTemplate(() => new ContentView()
+                    {
+                        Content = new ContentView()
+                        {
+                        }
+                        .Bind(ContentView.BindingContextProperty, "BindingContext", source: RelativeBindingSource.TemplatedParent)
+                        .Bind(ContentView.ContentProperty, "BindingContext", source: new RelativeBindingSource(RelativeBindingSourceMode.FindAncestor, typeof(ContentView)))
+                    }))
             }.Bind(SBorder.PaddingProperty, nameof(Padding), source: this);
         });
 
