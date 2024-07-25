@@ -1,9 +1,9 @@
 ﻿
-using Shadcn.Maui.Behaviors;
+using Shadcn.Maui.Controls;
 
 namespace Shadcn.Maui.Sandbox
 {
-    public partial class MainPage : ContentPage
+    public partial class MainPage : SPage
     {
         public MainPage()
         {

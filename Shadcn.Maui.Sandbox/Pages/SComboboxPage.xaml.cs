@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace Shadcn.Maui.Sandbox.Pages;
 
-public partial class SComboboxPage : ContentPage
+public partial class SComboboxPage
 {
     private string? _selectedItem = null;
     private bool _isOpen = false;

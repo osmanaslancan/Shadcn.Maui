@@ -2,8 +2,8 @@
 using CommunityToolkit.Maui.Views;
 
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Layouts;
 using Shadcn.Maui.Core;
-using System.Diagnostics;
 
 namespace Shadcn.Maui.Controls;
 
@@ -25,8 +25,30 @@ public class SPopover : ContentView
         set { SetValue(IsOpenProperty, value); }
     }
 
-    private Popup _popup;
-    private ContentView _contentView;
+    public static readonly BindableProperty HasAnimationProperty = BindableProperty.Create(nameof(HasAnimation), typeof(bool), typeof(SPopover), true);
+
+    public bool HasAnimation
+    {
+        get { return (bool)GetValue(HasAnimationProperty); }
+        set { SetValue(HasAnimationProperty, value); }
+    }
+
+    public static readonly BindableProperty PopoverSideProperty = BindableProperty.Create(nameof(PopoverSide), typeof(SPopoverSide), typeof(SPopover), SPopoverSide.Bottom);
+
+    public SPopoverSide PopoverSide
+    {
+        get { return (SPopoverSide)GetValue(PopoverSideProperty); }
+        set { SetValue(PopoverSideProperty, value); }
+    }
+
+    private SPopoverSide? _popoverSideOverride;
+    private Point? _boundsOffset;
+
+    private ContentView _popoverView;
+    private TapGestureRecognizer _closeGestureRecognizer;
+    private SPage? parentSPage;
+
+    private const double Spacing = 5;
 
     private static void IsOpenChanged(BindableObject bindableObject, object oldValue, object newValue)
     {
@@ -36,15 +58,15 @@ public class SPopover : ContentView
         if (value)
         {
             if (self.IsLoaded)
-                self.ShowPopup();
+                self.OpenPopup();
             else
             {
-                EventHandler? eventHandler = null;
-                eventHandler = (s, e) =>
+                void eventHandler(object? s, EventArgs e)
                 {
-                    self.ShowPopup();
+                    self.OpenPopup();
                     self.Loaded -= eventHandler;
-                };
+                }
+
                 self.Loaded += eventHandler;
             }
         }
@@ -59,111 +81,193 @@ public class SPopover : ContentView
         ControlTemplate = new ControlTemplate(() =>
         {
             return new ContentView()
-                .TapGesture(() => IsOpen = true)
+                .TapGesture(() => IsOpen = !IsOpen)
                 .Bind(ContentView.ContentProperty, nameof(TriggerView), source: this)
                 .Bind(ContentView.BindingContextProperty, nameof(BindingContext), source: this);
         });
 
-        _popup = new Popup()
-        {
-            Color = Colors.Transparent,
-            Content = new Grid
-            {
-                new AbsoluteLayout()
-                {
-                    BackgroundColor = Colors.Transparent,
-                    Children =
-                    {
-                        new ContentView()
+        _popoverView = new ContentView()
                         .Bind(ContentView.ContentProperty, nameof(Content), source: this)
-                        .Assign(out _contentView)
+                        .Anchor(0.5, 0.1)
+                        .Assign(out _popoverView);
 
-                    }
-                }.TapGesture(AnimatedClose)
-            }
-        };
-        
-        _popup.Opened += (s, e) =>
+        _popoverView.Loaded += (sender, e) =>
         {
-            if (!IsOpen)
-            {
-                _popup.Close();
-                return;
-            }
-
-            _popup.Window.RemoveOverlay(_popup.Window.Overlays.First());
-            _contentView!.Scale = 0;
-            _contentView.Opacity = 0;
-            _contentView.Anchor(0.5, 0.1);
-            _contentView.Animate("ScaleWithOpacity", new Animation((step) =>
-            {
-                _contentView.Opacity = step;
-                _contentView.Scale = step;
-            }, start: 0.8, easing: Easing.CubicOut), length: 150);
+            BoundsCheck();
         };
 
-        _popup.Closed += (s, e) =>
-        {
-            IsOpen = false;
-        };
+        _closeGestureRecognizer = new TapGestureRecognizer() { Command = new Command(() => IsOpen = false) };
 
         Loaded += (sender, e) =>
         {
-            var page = this.FindParentOfType<Page>() ?? throw new InvalidOperationException("Cant find a parent page to show popover");
+            parentSPage = this.FindParentOfType<SPage>() ?? throw new InvalidOperationException("Cant find a parent SPage to show popover");
+            parentSPage.SizeChanged += PageSizeChanged;
+        };
 
-            _popup.Size = new Size(page.Width, page.Height);
-            page.SizeChanged += updateSize;
-
-            void updateSize(object? sender, EventArgs args)
-            {
-                _popup.Close();
-            }
+        Unloaded += (sender, e) =>
+        {
+            if (parentSPage is not null)
+                parentSPage.SizeChanged -= PageSizeChanged;
         };
     }
 
-    private void ClosePopup()
+    private void PageSizeChanged(object? sender, EventArgs e)
     {
-        AnimatedClose();
+        BoundsCheck();
     }
 
-    private void AnimatedClose()
+    private async void ClosePopup()
     {
-        if (_contentView is null || _popup is null || _contentView.AnimationIsRunning("ScaleWithOpacity"))
+        if (parentSPage is null)
+            throw new ArgumentNullException("Cant find a parent SPage to show popover");
+
+        if (HasAnimation)
+            await AnimateClose();
+
+        parentSPage.RemoveAbsoluteView(_popoverView);
+        parentSPage.RemoveGestureRecognizer(_closeGestureRecognizer);
+    }
+
+    private void BoundsCheck()
+    {
+        if (!_popoverView.IsLoaded)
             return;
 
-        _contentView.Animate("ScaleWithOpacity", new Animation((step) =>
+        ArgumentNullException.ThrowIfNull(parentSPage);
+
+        var containerWidth = parentSPage.Width;
+        var containerHeight = parentSPage.Height;
+
+        var popoverWidth = _popoverView.Width;
+        var popoverHeight = _popoverView.Height;
+
+        var side = PopoverSide;
+
+        var (targetX, targetY) = TriggerView.PositionRelativeToPage();
+
+        switch (side)
         {
-            _contentView.Opacity = 1 - (step - 0.8);
-            _contentView.Scale = 1 - (step - 0.8);
+            case SPopoverSide.Bottom:
+                targetY += TriggerView.Height + Spacing;
+                targetY += popoverHeight;
+                if (targetY > containerHeight)
+                    _popoverSideOverride = SPopoverSide.Top;
+                else
+                    _popoverSideOverride = null;
+                break;
+            case SPopoverSide.Top:
+                targetY = targetY - Spacing - popoverHeight;
+                if (targetY < 0)
+                    _popoverSideOverride = SPopoverSide.Bottom;
+                else
+                    _popoverSideOverride = null;
+                break;
+            default:
+                break;
+        }
+
+        if (targetX + popoverWidth > containerWidth)
+        {
+            _boundsOffset = new Point(containerWidth - targetX - popoverWidth, 0);
+        }
+        else if (targetX < 0)
+        {
+            _boundsOffset = new Point(-targetX, 0);
+        }
+        else
+        {
+            _boundsOffset = null;
+        }
+
+        PositionPopout();
+    }
+
+    private void PopoverSizeChanged(object? sender, EventArgs _)
+    {
+        BoundsCheck();
+    }
+
+    private void PositionPopout()
+    {
+        _popoverView.RemoveBinding(AbsoluteLayout.LayoutBoundsProperty);
+
+        var (targetX, targetY) = TriggerView.PositionRelativeToPage();
+        
+        if (_boundsOffset is not null)
+        {
+            targetX += _boundsOffset.Value.X;
+            targetY += _boundsOffset.Value.Y;
+        }
+
+
+        var side = _popoverSideOverride ?? PopoverSide;
+
+        switch (side)
+        {
+            case SPopoverSide.Bottom:
+                targetY += TriggerView.Height + Spacing;
+                _popoverView.Anchor(0.5, 0.1);
+                _popoverView.LayoutBounds(targetX, targetY);
+                break;
+            case SPopoverSide.Top:
+                _popoverView.Anchor(0.5, 0.9);
+                _popoverView.Bind(AbsoluteLayout.LayoutBoundsProperty, "Height", source: _popoverView, convert: (double height) =>
+                {
+                    if (height < 0)
+                        return new Rect(0, 0, -1, -1);
+
+                    return new Rect(targetX, targetY - height - Spacing, -1, -1);
+                });
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void OpenPopup()
+    {
+        if (parentSPage is null)
+            throw new ArgumentNullException("Cant find a parent SPage to show popover");
+
+        PositionPopout();
+
+        parentSPage.AddAbsoluteView(_popoverView);
+        parentSPage.AddGestureRecognizer(_closeGestureRecognizer);
+        if (HasAnimation)
+            AnimateOpen();
+    }
+
+    private Task AnimateClose()
+    {
+        var taskCompletionSource = new TaskCompletionSource();
+
+        _popoverView.Animate("ScaleWithOpacity", new Animation((step) =>
+        {
+            _popoverView.Opacity = 1 - (step - 0.8);
+            _popoverView.Scale = 1 - (step - 0.8);
             if (step == 1)
-                _contentView.Opacity = 0;
+                _popoverView.Opacity = 0;
 
-        }, start: 0.8, easing: Easing.CubicIn), length: 150, finished: (_, _) =>
+        }, start: 0.8, easing: Easing.CubicIn), length: 150, finished: (_, _) => taskCompletionSource.SetResult());
+
+        return taskCompletionSource.Task;
+    }
+
+    private Task AnimateOpen()
+    {
+        var taskCompletionSource = new TaskCompletionSource();
+
+        _popoverView.Scale = 0;
+        _popoverView.Opacity = 0;
+        _popoverView.Animate("ScaleWithOpacity", new Animation((step) =>
         {
-            _popup.Close();
-        });
+            _popoverView.Opacity = step;
+            _popoverView.Scale = step;
+        }, start: 0.8, easing: Easing.CubicOut), length: 150, finished: (_, _) => taskCompletionSource.SetResult());
+
+        return taskCompletionSource.Task;
     }
-
-    protected virtual void PositionContentView()
-    {
-        var (x, y) = this.PositionRelativeToPage();
-
-        _contentView.LayoutBounds(x, y + 90);
-    }
-
-    private void ShowPopup()
-    {
-        if (Content is null)
-            return;
-
-        var page = this.FindParentOfType<Page>() ?? throw new InvalidOperationException("Cant find a parent page to show popover");
-
-        PositionContentView();
-
-        page.ShowPopup(_popup);
-        page.ShowPopup(_popup);
-    }
-
+  
     private static void OnTriggerViewPropertyChanged(BindableObject bindable, object oldValue, object newValue)
     {
         const string styleClass = "Shadcn-SPopoverTriggerView";

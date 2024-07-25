@@ -36,7 +36,7 @@ public class SContextMenu : ContentView
                 .Bind(ContentView.ContentProperty, nameof(TriggerView), source: this)
                 .Bind(ContentView.BindingContextProperty, nameof(BindingContext), source: this);
         });
-
+        
         _popup = new Popup()
         {
             Color = Colors.Transparent,
