@@ -8,7 +8,8 @@ internal static class BindableObjectHelpers
     {
         if (!typeof(T).IsSubclassOf(typeof(Behavior)))
         {
-            throw new InvalidOperationException($"This behavior is not supported in this platform.");
+            return;
+            //throw new InvalidOperationException($"This behavior is not supported in this platform.");
         }
 
         if (bindableObject is not TTargetType target)

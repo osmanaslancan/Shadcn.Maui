@@ -279,7 +279,7 @@ public partial class StyleResource : ResourceDictionary
            .SetPointerOverVisualState((style) => style
                 .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Accent"), GetColor("DarkAccent"))));
 
-        RegisterSelectorStyle<SLabel>(".Shadcn-SCommandItem>SLabel")
+        RegisterSelectorStyle<SLabel>("SCommandItem SLabel")
             .Add(SLabel.FontFamilyProperty, "GeistMedium");
 
         RegisterStyle(NewStyle<SCommandSeparator>(nameof(SCommandSeparator))

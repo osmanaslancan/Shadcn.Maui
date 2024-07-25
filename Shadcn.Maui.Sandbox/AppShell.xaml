@@ -24,5 +24,6 @@
         <ShellContent Route="SPopoverPage" Title="SPopover" ContentTemplate="{DataTemplate pages:SPopoverPage}"/>
         <ShellContent Route="SCommandPage" Title="SCommand" ContentTemplate="{DataTemplate pages:SCommandPage}"/>
         <ShellContent Route="SComboboxPage" Title="SCombobox" ContentTemplate="{DataTemplate pages:SComboboxPage}"/>
+        <ShellContent Route="SContextMenuPage" Title="SContextMenu" ContentTemplate="{DataTemplate pages:SContextMenuPage}"/>
     </TabBar>
 </Shell>

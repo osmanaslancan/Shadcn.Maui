@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:shadcn="clr-namespace:Shadcn.Maui.Controls;assembly=Shadcn.Maui"
+             x:Class="Shadcn.Maui.Sandbox.Pages.SContextMenuPage"
+             Title="SContextMenuPage">
+    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+        <shadcn:SContextMenu>
+            <shadcn:SContextMenu.TriggerView>
+                <shadcn:SBorder Padding="10" WidthRequest="400" HeightRequest="300" StrokeDashArray="6,6" >
+                    <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                        <shadcn:SLabel FontFamily="GeistMedium">
+                            Right click here
+                        </shadcn:SLabel>
+                    </HorizontalStackLayout>
+                </shadcn:SBorder>
+            </shadcn:SContextMenu.TriggerView>
+            <shadcn:SContextMenu.Content>
+                <shadcn:SCommand WidthRequest="200">
+                    <shadcn:SCommandGroup>
+                        <shadcn:SCommandItem>
+                            <shadcn:SLabel Text="Back"/>
+                        </shadcn:SCommandItem>
+                        <shadcn:SCommandItem>
+                            <shadcn:SLabel Text="Foward"/>
+                        </shadcn:SCommandItem>
+                        <shadcn:SCommandItem>
+                            <shadcn:SLabel Text="Reload"/>
+                        </shadcn:SCommandItem>
+                    </shadcn:SCommandGroup>
+                </shadcn:SCommand>
+            </shadcn:SContextMenu.Content>
+        </shadcn:SContextMenu>
+    </VerticalStackLayout>
+</ContentPage>

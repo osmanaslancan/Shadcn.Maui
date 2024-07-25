@@ -51,13 +51,10 @@ public class SmartStyleBehavior : Behavior<VisualElement>
 
     private void OnLoaded(object? sender, EventArgs args)
     {
-        if (sender is not VisualElement ve)
+        if (sender is not VisualElement ve || !stateBag.TryGetValue(ve.Id, out var state))
             return;
 
         CheckStyle(ve);
-
-        if (!stateBag.TryGetValue(ve.Id, out var state))
-            Debug.Assert(false);
 
 
         if (state.ListeningStyle)

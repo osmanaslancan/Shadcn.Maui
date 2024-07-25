@@ -1,15 +1,12 @@
 ﻿using CommunityToolkit.Maui.Markup;
 using CommunityToolkit.Maui.Views;
-
-using Microsoft.Maui.Controls;
 using Shadcn.Maui.Core;
-using System.Diagnostics;
 
 namespace Shadcn.Maui.Controls;
 
-public class SPopover : ContentView
+public class SContextMenu : ContentView
 {
-    public static readonly BindableProperty TriggerViewProperty = BindableProperty.Create(nameof(TriggerView), typeof(View), typeof(SPopover), propertyChanged: OnTriggerViewPropertyChanged);
+    public static readonly BindableProperty TriggerViewProperty = BindableProperty.Create(nameof(TriggerView), typeof(View), typeof(SPopover));
 
     public View TriggerView
     {
@@ -17,49 +14,25 @@ public class SPopover : ContentView
         set { SetValue(TriggerViewProperty, value); }
     }
 
-    public static readonly BindableProperty IsOpenProperty = BindableProperty.Create(nameof(IsOpen), typeof(bool), typeof(SPopover), false, propertyChanged: IsOpenChanged, defaultBindingMode: BindingMode.TwoWay);
-
-    public bool IsOpen
-    {
-        get { return (bool)GetValue(IsOpenProperty); }
-        set { SetValue(IsOpenProperty, value); }
-    }
-
     private Popup _popup;
     private ContentView _contentView;
+    private readonly TapGestureRecognizer gestureRecognizer;
 
-    private static void IsOpenChanged(BindableObject bindableObject, object oldValue, object newValue)
+    public SContextMenu()
     {
-        var self = (SPopover)bindableObject;
-        var value = (bool)newValue;
-
-        if (value)
+        gestureRecognizer = new TapGestureRecognizer()
         {
-            if (self.IsLoaded)
-                self.ShowPopup();
-            else
-            {
-                EventHandler? eventHandler = null;
-                eventHandler = (s, e) =>
-                {
-                    self.ShowPopup();
-                    self.Loaded -= eventHandler;
-                };
-                self.Loaded += eventHandler;
-            }
-        }
-        else
-        {
-            self.ClosePopup();
-        }
-    }
+            Buttons = ButtonsMask.Secondary,
+        };
+        gestureRecognizer.Tapped += ShowPopup;
 
-    public SPopover()
-    {
         ControlTemplate = new ControlTemplate(() =>
         {
             return new ContentView()
-                .TapGesture(() => IsOpen = true)
+                .Invoke(x =>
+                {
+                    x.GestureRecognizers.Add(gestureRecognizer);
+                })
                 .Bind(ContentView.ContentProperty, nameof(TriggerView), source: this)
                 .Bind(ContentView.BindingContextProperty, nameof(BindingContext), source: this);
         });
@@ -82,29 +55,18 @@ public class SPopover : ContentView
                 }.TapGesture(AnimatedClose)
             }
         };
-        
+
         _popup.Opened += (s, e) =>
         {
-            if (!IsOpen)
-            {
-                _popup.Close();
-                return;
-            }
-
             _popup.Window.RemoveOverlay(_popup.Window.Overlays.First());
             _contentView!.Scale = 0;
             _contentView.Opacity = 0;
-            _contentView.Anchor(0.5, 0.1);
+            _contentView.Anchor(0.1, 0.5);
             _contentView.Animate("ScaleWithOpacity", new Animation((step) =>
             {
                 _contentView.Opacity = step;
                 _contentView.Scale = step;
             }, start: 0.8, easing: Easing.CubicOut), length: 150);
-        };
-
-        _popup.Closed += (s, e) =>
-        {
-            IsOpen = false;
         };
 
         Loaded += (sender, e) =>
@@ -144,40 +106,27 @@ public class SPopover : ContentView
         });
     }
 
-    protected virtual void PositionContentView()
-    {
-        var (x, y) = this.PositionRelativeToPage();
 
-        _contentView.LayoutBounds(x, y + 90);
-    }
-
-    private void ShowPopup()
+    private void ShowPopup(object? sender, TappedEventArgs e)
     {
         if (Content is null)
             return;
 
         var page = this.FindParentOfType<Page>() ?? throw new InvalidOperationException("Cant find a parent page to show popover");
 
-        PositionContentView();
+        var (x, y) = this.PositionRelativeToPage();
+
+        var offset = e.GetPosition(TriggerView);
+
+        if (offset is not null)
+        {
+            x += offset.Value.X;
+            y += offset.Value.Y;
+        }
+
+        _contentView.LayoutBounds(x, y + 45);
 
         page.ShowPopup(_popup);
         page.ShowPopup(_popup);
-    }
-
-    private static void OnTriggerViewPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-        const string styleClass = "Shadcn-SPopoverTriggerView";
-
-        if (oldValue is View oldView && oldView.StyleClass.Contains(styleClass))
-        {
-            oldView.StyleClass.Remove(styleClass);
-            oldView.StyleClass = [.. oldView.StyleClass];
-        }
-
-        if (newValue is View newView && !newView.StyleClass.Contains(styleClass))
-        {
-            newView.StyleClass.Add(styleClass);
-            newView.StyleClass = [.. newView.StyleClass];
-        }
     }
 }
