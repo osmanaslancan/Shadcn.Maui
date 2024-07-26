@@ -1,8 +1,4 @@
 ﻿using CommunityToolkit.Maui.Markup;
-using CommunityToolkit.Maui.Views;
-
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Layouts;
 using Shadcn.Maui.Core;
 
 namespace Shadcn.Maui.Controls;
@@ -48,12 +44,16 @@ public class SPopover : ContentView
     private TapGestureRecognizer _closeGestureRecognizer;
     private SPage? parentSPage;
 
-    private const double Spacing = 5;
+    protected virtual double Spacing => 5;
+    protected virtual string TriggerStyleClass => "Shadcn-SPopoverTriggerView";
+    private const string AnimationKey = "ScaleWithOpacity";
 
     private static void IsOpenChanged(BindableObject bindableObject, object oldValue, object newValue)
     {
         var self = (SPopover)bindableObject;
         var value = (bool)newValue;
+
+        self._popoverView.AbortAnimation(AnimationKey);
 
         if (value)
         {
@@ -76,14 +76,24 @@ public class SPopover : ContentView
         }
     }
 
+    protected virtual GestureRecognizer GetTriggerGestureRecognizer()
+    {
+        return new TapGestureRecognizer()
+        {
+            Command = new Command(() => IsOpen = !IsOpen)
+        };
+    }
+
     public SPopover()
     {
         ControlTemplate = new ControlTemplate(() =>
         {
-            return new ContentView()
-                .TapGesture(() => IsOpen = !IsOpen)
+            var view = new ContentView()
                 .Bind(ContentView.ContentProperty, nameof(TriggerView), source: this)
                 .Bind(ContentView.BindingContextProperty, nameof(BindingContext), source: this);
+            view.GestureRecognizers.Add(GetTriggerGestureRecognizer());
+
+            return view;
         });
 
         _popoverView = new ContentView()
@@ -143,21 +153,21 @@ public class SPopover : ContentView
 
         var side = PopoverSide;
 
-        var (targetX, targetY) = TriggerView.PositionRelativeToPage();
+        var triggerPosition = GetTriggerPosition();
+        double y = 0;
 
         switch (side)
         {
             case SPopoverSide.Bottom:
-                targetY += TriggerView.Height + Spacing;
-                targetY += popoverHeight;
-                if (targetY > containerHeight)
+                y = popoverHeight + triggerPosition.Y + triggerPosition.Height;
+                if (y > containerHeight)
                     _popoverSideOverride = SPopoverSide.Top;
                 else
                     _popoverSideOverride = null;
                 break;
             case SPopoverSide.Top:
-                targetY = targetY - Spacing - popoverHeight;
-                if (targetY < 0)
+                y = triggerPosition.Y - popoverHeight;
+                if (y < 0)
                     _popoverSideOverride = SPopoverSide.Bottom;
                 else
                     _popoverSideOverride = null;
@@ -166,20 +176,27 @@ public class SPopover : ContentView
                 break;
         }
 
-        if (targetX + popoverWidth > containerWidth)
+        if (triggerPosition.X + popoverWidth > containerWidth)
         {
-            _boundsOffset = new Point(containerWidth - targetX - popoverWidth, 0);
+            _boundsOffset = new Point(containerWidth - triggerPosition.X - popoverWidth, 0);
         }
-        else if (targetX < 0)
+        else if (triggerPosition.X < 0)
         {
-            _boundsOffset = new Point(-targetX, 0);
+            _boundsOffset = new Point(-triggerPosition.X, 0);
         }
         else
         {
             _boundsOffset = null;
         }
 
-        PositionPopout();
+        PositionPopover();
+    }
+
+    protected virtual Rect GetTriggerPosition()
+    {
+        var (targetX, targetY) = TriggerView.PositionRelativeToPage();
+
+        return new Rect(targetX, targetY - Spacing, TriggerView.Width, TriggerView.Height + 2 * Spacing);
     }
 
     private void PopoverSizeChanged(object? sender, EventArgs _)
@@ -187,36 +204,48 @@ public class SPopover : ContentView
         BoundsCheck();
     }
 
-    private void PositionPopout()
+    protected virtual void ConfigureAnchor(View view, SPopoverSide side)
+    {
+        switch (side)
+        {
+            case SPopoverSide.Bottom:
+                _popoverView.Anchor(0.5, 0.1);
+                break;
+            case SPopoverSide.Top:
+                _popoverView.Anchor(0.5, 0.9);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void PositionPopover()
     {
         _popoverView.RemoveBinding(AbsoluteLayout.LayoutBoundsProperty);
 
-        var (targetX, targetY) = TriggerView.PositionRelativeToPage();
-        
+        var triggerPosition = GetTriggerPosition();
+
         if (_boundsOffset is not null)
         {
-            targetX += _boundsOffset.Value.X;
-            targetY += _boundsOffset.Value.Y;
+            triggerPosition = triggerPosition.Offset(_boundsOffset.Value);
         }
 
-
         var side = _popoverSideOverride ?? PopoverSide;
+
+        ConfigureAnchor(_popoverView, side);
 
         switch (side)
         {
             case SPopoverSide.Bottom:
-                targetY += TriggerView.Height + Spacing;
-                _popoverView.Anchor(0.5, 0.1);
-                _popoverView.LayoutBounds(targetX, targetY);
+                _popoverView.LayoutBounds(triggerPosition.X, triggerPosition.Y + triggerPosition.Height);
                 break;
             case SPopoverSide.Top:
-                _popoverView.Anchor(0.5, 0.9);
                 _popoverView.Bind(AbsoluteLayout.LayoutBoundsProperty, "Height", source: _popoverView, convert: (double height) =>
                 {
                     if (height < 0)
                         return new Rect(0, 0, -1, -1);
 
-                    return new Rect(targetX, targetY - height - Spacing, -1, -1);
+                    return new Rect(triggerPosition.X, triggerPosition.Y - height, -1, -1);
                 });
                 break;
             default:
@@ -229,7 +258,7 @@ public class SPopover : ContentView
         if (parentSPage is null)
             throw new ArgumentNullException("Cant find a parent SPage to show popover");
 
-        PositionPopout();
+        PositionPopover();
 
         parentSPage.AddAbsoluteView(_popoverView);
         parentSPage.AddGestureRecognizer(_closeGestureRecognizer);
@@ -240,8 +269,8 @@ public class SPopover : ContentView
     private Task AnimateClose()
     {
         var taskCompletionSource = new TaskCompletionSource();
-
-        _popoverView.Animate("ScaleWithOpacity", new Animation((step) =>
+        
+        _popoverView.Animate(AnimationKey, new Animation((step) =>
         {
             _popoverView.Opacity = 1 - (step - 0.8);
             _popoverView.Scale = 1 - (step - 0.8);
@@ -259,7 +288,7 @@ public class SPopover : ContentView
 
         _popoverView.Scale = 0;
         _popoverView.Opacity = 0;
-        _popoverView.Animate("ScaleWithOpacity", new Animation((step) =>
+        _popoverView.Animate(AnimationKey, new Animation((step) =>
         {
             _popoverView.Opacity = step;
             _popoverView.Scale = step;
@@ -270,17 +299,17 @@ public class SPopover : ContentView
   
     private static void OnTriggerViewPropertyChanged(BindableObject bindable, object oldValue, object newValue)
     {
-        const string styleClass = "Shadcn-SPopoverTriggerView";
+        var self = (SPopover)bindable;
 
-        if (oldValue is View oldView && oldView.StyleClass.Contains(styleClass))
+        if (oldValue is View oldView && oldView.StyleClass.Contains(self.TriggerStyleClass))
         {
-            oldView.StyleClass.Remove(styleClass);
+            oldView.StyleClass.Remove(self.TriggerStyleClass);
             oldView.StyleClass = [.. oldView.StyleClass];
         }
 
-        if (newValue is View newView && !newView.StyleClass.Contains(styleClass))
+        if (newValue is View newView && !newView.StyleClass.Contains(self.TriggerStyleClass))
         {
-            newView.StyleClass.Add(styleClass);
+            newView.StyleClass.Add(self.TriggerStyleClass);
             newView.StyleClass = [.. newView.StyleClass];
         }
     }
