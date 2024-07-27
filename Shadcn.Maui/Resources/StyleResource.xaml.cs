@@ -25,6 +25,7 @@ public partial class StyleResource : ResourceDictionary
         RegisterSBorderStyles();
         RegisterSCommandStyles();
         RegisterSPopoverStyles();
+        RegisterSSliderStyles();
     }
 
     private Color GetColor(string color)
@@ -135,7 +136,7 @@ public partial class StyleResource : ResourceDictionary
     {
         RegisterStyle(NewStyle<SBadge>("SBadge")
             .Add(SBadge.CornerRadiusProperty, new CornerRadius(99999))
-            .Add(SBadge.PaddingProperty, new Thickness(10,2)));
+            .Add(SBadge.PaddingProperty, new Thickness(10, 2)));
 
         RegisterSelectorStyle<Label>(".Shadcn-SBadge>Label")
             .Add(Label.FontSizeProperty, 14)
@@ -257,7 +258,7 @@ public partial class StyleResource : ResourceDictionary
             .Add(Entry.BackgroundColorProperty, Colors.Transparent));
 
         RegisterStyle(NewStyle<SIcon>("SCommandInput-Icon")
-            .Add(SIcon.MarginProperty, new Thickness(0,0,2,0))
+            .Add(SIcon.MarginProperty, new Thickness(0, 0, 2, 0))
             .AddAppThemeBinding(SIcon.ColorProperty, GetColor("MutedForeground"), GetColor("DarkMutedForeground")));
 
         RegisterStyle(NewStyle<SBorder>("SCommandInput-BottomBorder")
@@ -294,5 +295,25 @@ public partial class StyleResource : ResourceDictionary
             .Add(CursorPointerBehavior.CursorPointerProperty, true)
             .SetPointerOverVisualState((style) => style
                 .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Accent"), GetColor("DarkAccent"))));
+    }
+
+    private void RegisterSSliderStyles()
+    {
+        RegisterStyle(NewStyle<SBorder>("SSlider-Track")
+            .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Secondary"), GetColor("DarkSecondary"))
+            .Add(SBorder.CornerRadiusProperty, 9999)
+            .Add(SBorder.StrokeThicknessProperty, 0));
+
+        RegisterStyle(NewStyle<SBorder>("SSlider-Range")
+            .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Primary"), GetColor("DarkPrimary"))
+            .Add(SBorder.StrokeThicknessProperty, 0));
+
+        RegisterStyle(NewStyle<SBorder>("SSlider-Thumb")
+            .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Background"), GetColor("DarkBackground"))
+            .AddAppThemeBinding(SBorder.StrokeProperty, GetColor("Primary"), GetColor("DarkPrimary"))
+            .Add(SBorder.WidthRequestProperty, 25)
+            .Add(SBorder.HeightRequestProperty, 25)
+            .Add(SBorder.CornerRadiusProperty, 9999)
+            .Add(SBorder.StrokeThicknessProperty, 2));
     }
 }
