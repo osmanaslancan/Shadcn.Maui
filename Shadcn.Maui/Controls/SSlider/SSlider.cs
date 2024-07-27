@@ -72,9 +72,9 @@ public class SSlider : TemplatedView
                      new SBorder()
                      {
                         StyleClass = ["Shadcn-SSlider-Thumb"],
-                     }.LayoutFlags(Microsoft.Maui.Layouts.AbsoluteLayoutFlags.YProportional)
-                     .Bind(AbsoluteLayout.LayoutBoundsProperty, new Binding("Value", source: this), new Binding("MinValue", source: this), new Binding("MaxValue", source: this), new Binding("Width", source: this),
-                                convert: ((double value, double min, double max, double width) binds) => new Rect(Math.Min(binds.value / (binds.max - binds.min), 1) * binds.width - 12.5, 0.5, -1, -1))
+                     }.LayoutFlags(Microsoft.Maui.Layouts.AbsoluteLayoutFlags.PositionProportional)
+                     .Bind(AbsoluteLayout.LayoutBoundsProperty, new Binding("Value", source: this), new Binding("MinValue", source: this), new Binding("MaxValue", source: this),
+                                convert: ((double value, double min, double max) binds) => new Rect(Math.Min(binds.value / (binds.max - binds.min), 1), 0.5, -1, -1))
                 }
             };
 
