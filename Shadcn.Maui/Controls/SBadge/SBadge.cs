@@ -1,14 +1,16 @@
-﻿namespace Shadcn.Maui.Controls;
+﻿using Shadcn.Maui.Core;
 
-public class SBadge : SBorder
+namespace Shadcn.Maui.Controls;
+
+public class SBadge : SBorder, IVariantStyleMapper<SBadgeVariant>
 {
     public static readonly BindableProperty VariantProperty = BindableProperty.Create(
         nameof(Variant),
         typeof(SBadgeVariant),
         typeof(SBadge),
         SBadgeVariant.Primary,
-        propertyChanging: VariantChanging,
-        propertyChanged: VariantChanged);
+        propertyChanging: VariantHelpers.VariantPropertyChanging<SButtonVariant>,
+        propertyChanged: VariantHelpers.VariantPropertyChanged<SButtonVariant>);
 
     public SBadgeVariant Variant
     {
@@ -16,9 +18,11 @@ public class SBadge : SBorder
         set => SetValue(VariantProperty, value);
     }
 
-    private string GetVariantStyleClass(SBadgeVariant variant)
+    public VisualElement VariantElement => this;
+
+    public string MapVariant(SBadgeVariant variant)
     {
-        return variant switch
+        return "Shadcn-" + variant switch
         {
             SBadgeVariant.Primary => "SBadge-Primary",
             SBadgeVariant.Secondary => "SBadge-Secondary",
@@ -28,44 +32,9 @@ public class SBadge : SBorder
         };
     }
 
-    private void AddVariantStyleClass(SBadgeVariant variant)
-    {
-        var styleClass = "Shadcn-" + GetVariantStyleClass(variant);
-
-        StyleClass ??= [];
-
-        StyleClass = [..StyleClass, styleClass];
-    }
-
-    private void RemoveVariantStyleClass(SBadgeVariant variant)
-    {
-        if (StyleClass is null)
-            return;
-
-        StyleClass.Remove("Shadcn-" + GetVariantStyleClass(variant));
-    }
-
-    private static void VariantChanging(BindableObject bindable, object oldValue, object newValue)
-    {
-        if (bindable is not SBadge badge)
-            return;
-
-        if (oldValue is SBadgeVariant oldVariant)
-            badge.RemoveVariantStyleClass(oldVariant);
-    }
-
-    private static void VariantChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-        if (bindable is not SBadge badge)
-            return;
-
-        if (newValue is SBadgeVariant newVariant)
-            badge.AddVariantStyleClass(newVariant);
-    }
-
     public SBadge()
     {
         StyleClass = ["Shadcn-SBadge"];
-        AddVariantStyleClass(SBadgeVariant.Primary);
+        this.AddVariantStyleClass(SBadgeVariant.Primary);
     }
 }

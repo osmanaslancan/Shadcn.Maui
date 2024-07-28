@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:shadcn="clr-namespace:Shadcn.Maui.Controls;assembly=Shadcn.Maui"
+             x:Class="Shadcn.Maui.Sandbox.Pages.STogglePage"
+             Title="STogglePage">
+    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="40">
+        <shadcn:SToggle WidthRequest="40" HeightRequest="40">
+            <shadcn:SIcon Icon="{StaticResource IconBold}" Size="32"/>
+        </shadcn:SToggle>
+        <shadcn:SToggle WidthRequest="40" HeightRequest="40" Variant="Outline">
+            <shadcn:SIcon Icon="{StaticResource IconItalic}" Size="32"/>
+        </shadcn:SToggle>
+        <shadcn:SToggle HeightRequest="40" >
+            <HorizontalStackLayout Spacing="5" Padding="10,5,10,5">
+                <shadcn:SIcon VerticalOptions="Center" Icon="{StaticResource IconItalic}" Size="32"/>
+                <shadcn:SLabel FontFamily="GeistMedium" VerticalTextAlignment="Center" Text="Italic"/>
+            </HorizontalStackLayout>
+        </shadcn:SToggle>
+    </VerticalStackLayout>
+</ContentPage>

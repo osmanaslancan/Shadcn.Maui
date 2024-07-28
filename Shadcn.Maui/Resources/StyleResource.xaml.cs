@@ -1,6 +1,5 @@
 
 using CommunityToolkit.Maui.Markup;
-using Microsoft.Maui.Controls.Shapes;
 using Microsoft.Maui.Layouts;
 using Shadcn.Maui.Behaviors;
 using Shadcn.Maui.Controls;
@@ -11,7 +10,6 @@ namespace Shadcn.Maui.Resources;
 
 public partial class StyleResource : ResourceDictionary
 {
-
     public StyleResource()
     {
         InitializeComponent();
@@ -26,6 +24,7 @@ public partial class StyleResource : ResourceDictionary
         RegisterSCommandStyles();
         RegisterSPopoverStyles();
         RegisterSSliderStyles();
+        RegisterSToggleStyles();
     }
 
     private Color GetColor(string color)
@@ -43,7 +42,7 @@ public partial class StyleResource : ResourceDictionary
         return style;
     }
 
-    private Style<T> RegisterSelectorStyle<T>(string selector)
+    private Style<T> RegisterSelectorStyle<T>(string selector, int order = 0)
         where T : BindableObject
     {
         Style implicitStyle;
@@ -60,7 +59,7 @@ public partial class StyleResource : ResourceDictionary
 
         var innerStyle = new Style<T>();
 
-        implicitStyle.Behaviors.Add(new SmartStyleBehavior() { Selector = selector, Style = innerStyle.MauiStyle });
+        implicitStyle.Behaviors.Add(new SmartStyleBehavior() { Selector = selector, Style = innerStyle.MauiStyle, Order = order });
 
         return innerStyle;
     }
@@ -316,4 +315,56 @@ public partial class StyleResource : ResourceDictionary
             .Add(SBorder.CornerRadiusProperty, 9999)
             .Add(SBorder.StrokeThicknessProperty, 2));
     }
-}
+
+    private void RegisterSToggleStyles()
+    {
+        RegisterStyle(NewStyle<SToggle>("SToggle")
+            .Add(CursorPointerBehavior.CursorPointerProperty, true)
+            .SetPointerOverVisualState((style) => style
+                .Add(SToggle.IsPointerOverProperty, true)));
+
+        RegisterStyle(NewStyle<SBorder>("SToggle-Border")
+            .Add(SBorder.BackgroundColorProperty, Colors.Transparent)
+            .Add(SBorder.CornerRadiusProperty, new CornerRadius(6)));
+
+        RegisterStyle(NewStyle<SBorder>("SToggle-Default")
+            .Add(SBorder.StrokeThicknessProperty, 0)
+            .Add(SBorder.StrokeProperty, Colors.Transparent)
+            .SetPointerOverVisualState((style) => style
+                .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Muted"), GetColor("DarkMuted"))));
+
+        RegisterStyle(NewStyle<SBorder>("SToggle-Outline")
+            .Add(SBorder.StrokeThicknessProperty, 1)
+            .AddAppThemeBinding(SBorder.StrokeProperty, GetColor("Input"), GetColor("DarkInput"))
+            .SetPointerOverVisualState((style) => style
+                .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Accent"), GetColor("DarkAccent"))));
+
+        RegisterSelectorStyle<SBorder>(".Shadcn-SToggle:Value > .Shadcn-SToggle-Border")
+            .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Accent"), GetColor("DarkAccent"));
+
+        RegisterSelectorStyle<SBorder>(".Shadcn-SToggle:IsPointerOver > .Shadcn-SToggle-Border")
+            .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Accent"), GetColor("DarkAccent"));
+
+        RegisterSelectorStyle<SIcon>(".Shadcn-SToggle-Border SIcon")
+           .Add(SIcon.TranslationXProperty, -1)
+           .AddAppThemeBinding(SIcon.ColorProperty, GetColor("Primary"), GetColor("DarkPrimary"));
+
+        RegisterSelectorStyle<SIcon>(".Shadcn-SToggle:Value > .Shadcn-SToggle-Border SIcon", order: 1)
+            .AddAppThemeBinding(SIcon.ColorProperty, GetColor("AccentForeground"), GetColor("DarkAccentForeground"));
+
+        RegisterSelectorStyle<SIcon>(".Shadcn-SToggle:IsPointerOver > .Shadcn-SToggle-Border SIcon")
+            .AddAppThemeBinding(SIcon.ColorProperty, GetColor("MutedForeground"), GetColor("DarkMutedForeground"));
+
+        RegisterSelectorStyle<SLabel>(".Shadcn-SToggle-Border SLabel")
+           .Add(SLabel.FontFamilyProperty, "GeistMedium")
+           .AddAppThemeBinding(SLabel.TextColorProperty, GetColor("Primary"), GetColor("DarkPrimary"));
+
+        RegisterSelectorStyle<SLabel>(".Shadcn-SToggle:Value > .Shadcn-SToggle-Border SLabel", order: 1)
+            .AddAppThemeBinding(SLabel.TextColorProperty, GetColor("AccentForeground"), GetColor("DarkAccentForeground"));
+
+        RegisterSelectorStyle<SLabel>(".Shadcn-SToggle:IsPointerOver > .Shadcn-SToggle-Border SLabel")
+            .AddAppThemeBinding(SLabel.TextColorProperty, GetColor("MutedForeground"), GetColor("DarkMutedForeground"));
+
+
+    }
+}   

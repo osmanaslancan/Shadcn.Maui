@@ -1,4 +1,5 @@
 ﻿using Shadcn.Maui.Core;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 
 namespace Shadcn.Maui.Behaviors;
@@ -6,10 +7,15 @@ namespace Shadcn.Maui.Behaviors;
 [ContentProperty(nameof(Style))]
 public class SmartStyleBehavior : Behavior<VisualElement>
 {
+    
+    private static readonly ConcurrentDictionary<VisualElement, List<SmartStyleBehavior>> ElementBehaviors = new ConcurrentDictionary<VisualElement, List<SmartStyleBehavior>>();
+
     public string Selector
     {
         set => _selector = Core.Selector.Parse(new StringReader(value));
     }
+
+    public int Order { get; set; } = 0;
 
     private Selector? _selector;
     private Style? _style;
@@ -46,6 +52,12 @@ public class SmartStyleBehavior : Behavior<VisualElement>
             ListeningStyle = false
         };
 
+        ElementBehaviors.AddOrUpdate(ve, [this], (element, old) =>
+        {
+            old.Add(this);
+            return old;
+        });
+
         ve.Loaded += OnLoaded;
     }
 
@@ -65,6 +77,33 @@ public class SmartStyleBehavior : Behavior<VisualElement>
 
     }
 
+    private (List<string> externClasses, Dictionary<SmartStyleBehavior, string> smartStyleClasses) SeparateClasses(VisualElement element)
+    {
+        var smartStyleClasses = new Dictionary<SmartStyleBehavior, string>();
+        var externClasses = new List<string>(element.StyleClass);
+        if (ElementBehaviors.TryGetValue(element, out var behaviors))
+        {
+            foreach (var behavior in behaviors)
+            {
+                if (behavior == this)
+                    continue;
+
+                if (smartStyleClasses.ContainsKey(behavior))
+                    continue;
+
+                if (element.StyleClass.Contains(behavior.Style!.Class))
+                {
+                    smartStyleClasses.Add(behavior, behavior.Style!.Class);
+                    externClasses.Remove(behavior.Style!.Class);
+                }
+            }
+        }
+
+        
+
+        return (externClasses, smartStyleClasses);
+    }
+
     private void CheckStyle(VisualElement ve)
     {
         if (!stateBag.TryGetValue(ve.Id, out var state))
@@ -77,7 +116,12 @@ public class SmartStyleBehavior : Behavior<VisualElement>
                 Application.Current!.Resources.Add(_style);
 
             ve.StyleClass ??= [];
-            ve.StyleClass = ve.StyleClass.Concat([_style!.Class]).ToList();
+            var (externClasses, smartStyleClasses) = SeparateClasses(ve);
+
+            smartStyleClasses.Add(this, Style!.Class);
+
+            ve.StyleClass = [..smartStyleClasses.Where(x => x.Key.Order < 0).OrderBy(x => x.Key.Order).Select(x => x.Value), ..externClasses, ..smartStyleClasses.Where(x => x.Key.Order >= 0).OrderBy(x => x.Key.Order).Select(x => x.Value)];
+
             state.AppliedClass = true;
         }
         else if (!_selector!.Matches(ve) && state.AppliedClass)
@@ -95,6 +139,9 @@ public class SmartStyleBehavior : Behavior<VisualElement>
     {
         if (!stateBag.TryGetValue(ve.Id, out var state))
             Debug.Assert(false);
+
+        if (ElementBehaviors.TryGetValue(ve, out var list))
+            list.Remove(this);
 
 
         ve.Loaded -= OnLoaded;

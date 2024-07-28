@@ -106,15 +106,15 @@ abstract class Selector
                         return Invalid;
                     setCurrentSelector(new And(), new Base(element));
                     break;
-                //case ':':
-                //    reader.Read();
-                //    var property = reader.ReadIdent();
+                case ':':
+                    reader.Read();
+                    var property = reader.ReadIdent();
 
-                //    if (property == null)
-                //        return Invalid;
+                    if (property == null)
+                        return Invalid;
 
-                //    setCurrentSelector(new And(), new ElementPropertyChecker(property));
-                //    break;
+                    setCurrentSelector(new And(), new ElementPropertyChecker(property));
+                    break;
                 case ' ':
                 case '\t':
                 case '\n':
@@ -338,7 +338,7 @@ abstract class Selector
         {
             ElementName = elementName;
         }
-        
+
 
         public string ElementName { get; }
         public override bool Matches(VisualElement styleable)
@@ -393,109 +393,145 @@ abstract class Selector
             return false;
         }
 
+        private Dictionary<Guid, EventHandler<ParentChangingEventArgs>> _parentChangingHandlers = new();
+        private Dictionary<Guid, EventHandler> _parentChangedHandlers = new();
+
         public override void Bind(VisualElement styleable, Action action)
         {
             Right.Bind(styleable, action);
             // this is adding too much complexity
             // this will be implemented in the future
-            //BindToProperty(styleable, action, nameof(VisualElement.Parent));
-
-            var parent = styleable.Parent as VisualElement;
-            while (parent != null)
+            if (styleable is not Page)
             {
-                Left.Bind(parent, action);
-                parent = parent.Parent as VisualElement;
+                void parentChangingHandler(object? s, ParentChangingEventArgs e)
+                {
+                    if (e.OldParent is VisualElement oldParent)
+                        Left.UnBind(oldParent);
+                    if (e.NewParent is VisualElement newParent)
+                        Left.Bind(newParent, action);
+                }
+                void parentChangedHandler(object? s, EventArgs e)
+                {
+                    action();
+                }
+
+                _parentChangingHandlers[styleable.Id] = parentChangingHandler;
+                _parentChangedHandlers[styleable.Id] = parentChangedHandler;
+
+                styleable.ParentChanging += parentChangingHandler;
+                styleable.ParentChanged += parentChangedHandler;
+
+                var parent = styleable.Parent as VisualElement;
+                while (parent != null)
+                {
+                    Left.Bind(parent, action);
+                    parent = parent.Parent as VisualElement;
+                }
             }
         }
 
         public override void UnBind(VisualElement styleable)
         {
             Right.UnBind(styleable);
-            //UnBindPropertyListener(styleable);
 
-            var parent = styleable.Parent as VisualElement;
-            while (parent != null)
+            if (styleable is not Page)
             {
-                Left.UnBind(parent);
-                parent = parent.Parent as VisualElement;
+                if (_parentChangingHandlers.TryGetValue(styleable.Id, out var parentChangingHandler))
+                {
+                    styleable.ParentChanging -= parentChangingHandler;
+                    _parentChangingHandlers.Remove(styleable.Id);
+                }
+
+                if (_parentChangedHandlers.TryGetValue(styleable.Id, out var parentChangedHandler))
+                {
+                    styleable.ParentChanged -= parentChangedHandler;
+                    _parentChangedHandlers.Remove(styleable.Id);
+                }
+
+                var parent = styleable.Parent as VisualElement;
+                while (parent != null)
+                {
+                    Left.UnBind(parent);
+                    parent = parent.Parent as VisualElement;
+                }
             }
         }
     }
 
-    //sealed class Adjacent : Operator
-    //{
-    //    public override bool Matches(VisualElement styleable)
-    //    {
-    //        if (!Right.Matches(styleable))
-    //            return false;
-    //        if (styleable.Parent == null)
-    //            return false;
+        //sealed class Adjacent : Operator
+        //{
+        //    public override bool Matches(VisualElement styleable)
+        //    {
+        //        if (!Right.Matches(styleable))
+        //            return false;
+        //        if (styleable.Parent == null)
+        //            return false;
 
-    //        VisualElement prev = null;
-    //        foreach (var elem in styleable.Parent.Children)
-    //        {
-    //            if (elem == styleable && prev != null)
-    //                return Left.Matches(prev);
-    //            prev = elem;
-    //        }
-    //        return false;
-    //        //var index = styleable.Parent.Children.IndexOf(styleable);
-    //        //if (index == 0)
-    //        //	return false;
-    //        //var adjacent = styleable.Parent.Children[index - 1];
-    //        //return Left.Matches(adjacent);
-    //    }
-    //}
+        //        VisualElement prev = null;
+        //        foreach (var elem in styleable.Parent.Children)
+        //        {
+        //            if (elem == styleable && prev != null)
+        //                return Left.Matches(prev);
+        //            prev = elem;
+        //        }
+        //        return false;
+        //        //var index = styleable.Parent.Children.IndexOf(styleable);
+        //        //if (index == 0)
+        //        //	return false;
+        //        //var adjacent = styleable.Parent.Children[index - 1];
+        //        //return Left.Matches(adjacent);
+        //    }
+        //}
 
-    //sealed class Sibling : Operator
-    //{
-    //    public override bool Matches(VisualElement styleable)
-    //    {
-    //        if (!Right.Matches(styleable))
-    //            return false;
-    //        if (styleable.Parent == null)
-    //            return false;
+        //sealed class Sibling : Operator
+        //{
+        //    public override bool Matches(VisualElement styleable)
+        //    {
+        //        if (!Right.Matches(styleable))
+        //            return false;
+        //        if (styleable.Parent == null)
+        //            return false;
 
-    //        int selfIndex = 0;
-    //        bool foundSelfInParent = false;
-    //        foreach (var elem in ((VisualElement)styleable.Parent).Children)
-    //        {
-    //            if (elem == styleable)
-    //            {
-                    
-    //                foundSelfInParent = true;
-    //                break;
-    //            }
-    //            ++selfIndex;
-    //        }
+        //        int selfIndex = 0;
+        //        bool foundSelfInParent = false;
+        //        foreach (var elem in ((VisualElement)styleable.Parent).Children)
+        //        {
+        //            if (elem == styleable)
+        //            {
 
-    //        if (!foundSelfInParent)
-    //            return false;
+        //                foundSelfInParent = true;
+        //                break;
+        //            }
+        //            ++selfIndex;
+        //        }
 
-    //        int index = 0;
-    //        foreach (var elem in styleable.Parent.Children)
-    //        {
-    //            if (index >= selfIndex)
-    //                return false;
-    //            if (Left.Matches(elem))
-    //                return true;
-    //            ++index;
-    //        }
+        //        if (!foundSelfInParent)
+        //            return false;
 
-    //        return false;
+        //        int index = 0;
+        //        foreach (var elem in styleable.Parent.Children)
+        //        {
+        //            if (index >= selfIndex)
+        //                return false;
+        //            if (Left.Matches(elem))
+        //                return true;
+        //            ++index;
+        //        }
 
-    //        //var index = styleable.Parent.Children.IndexOf(styleable);
-    //        //if (index == 0)
-    //        //	return false;
-    //        //int siblingIndex = -1;
-    //        //for (var i = 0; i < index; i++)
-    //        //	if (Left.Matches(styleable.Parent.Children[i])) {
-    //        //		siblingIndex = i;
-    //        //		break;
-    //        //	}
-    //        //return siblingIndex != -1;
-    //    }
-    //}
-}
+        //        return false;
+
+        //        //var index = styleable.Parent.Children.IndexOf(styleable);
+        //        //if (index == 0)
+        //        //	return false;
+        //        //int siblingIndex = -1;
+        //        //for (var i = 0; i < index; i++)
+        //        //	if (Left.Matches(styleable.Parent.Children[i])) {
+        //        //		siblingIndex = i;
+        //        //		break;
+        //        //	}
+        //        //return siblingIndex != -1;
+        //    }
+        //}
+    }
 
 
