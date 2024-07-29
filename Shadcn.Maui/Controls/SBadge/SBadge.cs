@@ -9,8 +9,8 @@ public class SBadge : SBorder, IVariantStyleMapper<SBadgeVariant>
         typeof(SBadgeVariant),
         typeof(SBadge),
         SBadgeVariant.Primary,
-        propertyChanging: VariantHelpers.VariantPropertyChanging<SButtonVariant>,
-        propertyChanged: VariantHelpers.VariantPropertyChanged<SButtonVariant>);
+        propertyChanging: VariantHelpers.VariantPropertyChanging<SBadgeVariant>,
+        propertyChanged: VariantHelpers.VariantPropertyChanged<SBadgeVariant>);
 
     public SBadgeVariant Variant
     {
