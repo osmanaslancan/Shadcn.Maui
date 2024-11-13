@@ -145,33 +145,6 @@
             <Style TargetType="ScrollView">
                 <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Background}, Dark={StaticResource DarkBackground}}"/>
             </Style>
-            <Style TargetType="Entry">
-                <Setter Property="behaviors:EntryExtensionsBehavior.HasUnderLine" Value="False"/>
-            </Style>
-            <Style Class="SEntry-Entry" TargetType="Entry">
-                <Setter Property="BackgroundColor" Value="Transparent"/>
-            </Style>
-            <Style Class="SEntry-Ring" TargetType="Border">
-                <Style.Triggers>
-                    <Trigger TargetType="Border" Property="IsFocused" Value="True">
-                        <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Ring}, Dark={StaticResource DarkRing}}"/>
-                        <Setter Property="StrokeThickness" Value="1"/>
-                        <Setter Property="Padding" Value="0"/>
-                    </Trigger>
-                </Style.Triggers>
-                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Background}, Dark={StaticResource DarkBackground}}" />
-                <Setter Property="Stroke" Value="{x:Null}"/>
-                <Setter Property="StrokeThickness" Value="0"/>
-                <Setter Property="StrokeShape" Value="RoundRectangle 5"/>
-                <Setter Property="Padding" Value="1"/>
-            </Style>
-            <Style Class="SEntry-Border" TargetType="Border">
-                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Background}, Dark={StaticResource DarkBackground}}"/>
-                <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Border}, Dark={StaticResource DarkBorder}}" />
-                <Setter Property="StrokeThickness" Value="1"/>
-                <Setter Property="StrokeShape" Value="RoundRectangle 5"/>
-                <Setter Property="Padding" Value="1" />
-            </Style>
             <Style Class="SCard-FlexLayout" TargetType="FlexLayout">
                 <Setter Property="Direction" Value="Column"/>
             </Style>

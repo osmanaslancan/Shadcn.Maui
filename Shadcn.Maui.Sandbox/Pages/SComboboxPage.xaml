@@ -5,6 +5,7 @@
              xmlns:shadcn="clr-namespace:Shadcn.Maui.Controls;assembly=Shadcn.Maui"
              x:Class="Shadcn.Maui.Sandbox.Pages.SComboboxPage"
              BindingContext="{Binding Source={RelativeSource Self}}"
+             x:DataType="local:SComboboxPage"
              Title="SCombobox">
     <Grid>
         <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">

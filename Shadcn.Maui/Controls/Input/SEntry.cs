@@ -14,19 +14,20 @@ public partial class SEntry : TemplatedView
     {
         _entry = new Entry()
         {
-            StyleClass = ["SEntry-Entry"],
+            StyleClass = ["Shadcn-SEntry-Entry"],
         };
 
         BindWrappedEntry(_entry);
         ControlTemplate = new ControlTemplate(() =>
-            new Border
+            new SBorder
             {
-                StyleClass = ["SEntry-Ring"],
-                Content = new Border
+                StyleClass = ["Shadcn-SEntry-Ring"],
+                Content = new SBorder
                 {
-                    StyleClass = ["SEntry-Border"],
+                    StyleClass = ["Shadcn-SEntry-Border"],
                     Content = _entry
                 }
             });
+        
     }
 }

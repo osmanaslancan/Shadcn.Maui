@@ -8,6 +8,7 @@
     Title="Shadcn.Maui.Sandbox">
     <TabBar>
         <ShellContent Route="MainPage" Title="Welcome" ContentTemplate="{DataTemplate local:MainPage}"/>
+        <ShellContent Route="SEntryPage" Title="SEntry" ContentTemplate="{DataTemplate pages:SEntryPage}"/>
         <ShellContent Route="ButtonsPage" Title="Buttons" ContentTemplate="{DataTemplate pages:ButtonsPage}"/>
         <ShellContent Route="TabsPage" Title="Tabs" ContentTemplate="{DataTemplate pages:TabsPage}"/>
         <ShellContent Route="CardPage" Title="Card" ContentTemplate="{DataTemplate pages:CardPage}"/>

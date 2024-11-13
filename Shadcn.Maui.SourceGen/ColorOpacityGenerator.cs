@@ -57,6 +57,7 @@ public class ColorOpacityGenerator : IIncrementalGenerator
                 
                 public partial class {{source.Name}}
                 {
+                {{GetColorConstants(source.Xaml)}}
                     private void AddOpacities()
                     {
                 {{GetColorVariants(source.Xaml)}}
@@ -67,12 +68,27 @@ public class ColorOpacityGenerator : IIncrementalGenerator
            });
     }
 
+    private static string GetColorConstants(XDocument xdoc)
+    {
+        List<(string key, string color)> colors = FindColors(xdoc);
+
+        var sb = new StringBuilder();
+
+        foreach (var (key, _) in colors)
+        {
+            sb.AppendLine($"\tpublic const string {key} = nameof({key});");
+            foreach (var item in GenerateNumbers())
+            {
+                sb.AppendLine($"\tpublic const string {key}{item} = nameof({key}{item});");
+            }
+        }
+
+        return sb.ToString();
+    }
+
     private static string GetColorVariants(XDocument xdoc)
     {
-        List<(string key, string color)> colors = xdoc.Descendants()
-            .Where(x => x.Name.LocalName == "Color")
-            .Select(x => (x.Attributes().FirstOrDefault(x => x.Name.LocalName == "Key").Value, x.Value))
-            .Where(x => x.Item1 != null).ToList();
+        List<(string key, string color)> colors = FindColors(xdoc);
 
         var sb = new StringBuilder();
 
@@ -95,6 +111,13 @@ public class ColorOpacityGenerator : IIncrementalGenerator
         return sb.ToString();
     }
 
+    private static List<(string key, string color)> FindColors(XDocument xdoc)
+    {
+        return xdoc.Descendants()
+            .Where(x => x.Name.LocalName == "Color")
+            .Select(x => (x.Attributes().FirstOrDefault(x => x.Name.LocalName == "Key").Value, x.Value))
+            .Where(x => x.Item1 != null).ToList();
+    }
 
     private static IEnumerable<int> GenerateNumbers()
     {

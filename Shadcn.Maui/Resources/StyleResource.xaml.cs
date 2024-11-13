@@ -5,6 +5,7 @@ using Shadcn.Maui.Behaviors;
 using Shadcn.Maui.Controls;
 using Shadcn.Maui.Core;
 using System.Diagnostics;
+using C = Shadcn.Maui.Resources.ShadcnColors;
 
 namespace Shadcn.Maui.Resources;
 
@@ -13,6 +14,7 @@ public partial class StyleResource : ResourceDictionary
     public StyleResource()
     {
         InitializeComponent();
+        RegisterSEntryStyles();
         RegisterSCardStyles();
         RegisterSAlertDialogStyles();
         RegisterSAvatarStyles();
@@ -73,6 +75,42 @@ public partial class StyleResource : ResourceDictionary
         Add(style.Class, style);
     }
 
+    private void RegisterSEntryStyles()
+    {
+        RegisterStyle(
+            NewStyle<Entry>("SEntry-Entry")
+            .Add(EntryExtensionsBehavior.HasUnderLineProperty, false)
+            .Add(Entry.WidthProperty, 2000)
+            .Add(Entry.BackgroundProperty, Brush.Transparent)
+        );
+
+        RegisterStyle(
+            NewStyle<SBorder>("SEntry-Ring")
+            .AddResourceAppThemeBinding(SBorder.BackgroundColorProperty, this, C.Background)
+            .Add(SBorder.BackgroundColorProperty, Colors.Transparent)
+            .Add(SBorder.MaximumWidthRequestProperty, 320)
+            .Add(SBorder.StrokeProperty, Brush.Transparent)
+            .Add(SBorder.CornerRadiusProperty, 5)
+            .Add(SBorder.StrokeThicknessProperty, 0)
+            .Add(SBorder.PaddingProperty, 1)
+        );
+        
+        RegisterSelectorStyle<SBorder>(".Shadcn-SEntry-Ring > SBorder > Entry:IsFocused")
+            .AddResourceAppThemeBinding(SBorder.StrokeProperty, this, C.Ring)
+            .Add(SBorder.BackgroundColorProperty, Colors.Red)
+            .Add(SBorder.StrokeThicknessProperty, 2);
+
+        RegisterStyle(
+            NewStyle<SBorder>("SEntry-Border")
+            .Add(SBorder.MaximumWidthRequestProperty, 320)
+            .AddResourceAppThemeBinding(SBorder.BackgroundColorProperty, this, C.Background)
+            .AddResourceAppThemeBinding(SBorder.StrokeProperty, this, C.Border)
+            .Add(SBorder.CornerRadiusProperty, 5)
+            .Add(SBorder.StrokeThicknessProperty, 1)
+            .Add(SBorder.PaddingProperty, 1)
+        );
+    }
+
     private void RegisterSCardStyles()
     {
         RegisterStyle(
@@ -88,8 +126,8 @@ public partial class StyleResource : ResourceDictionary
                         VerticalOptions = LayoutOptions.Start,
                     }.Bind(BindableLayout.ItemsSourceProperty, nameof(SCard.Children), source: RelativeBindingSource.TemplatedParent)
                     .SetBindableValue(BindableLayout.ItemTemplateProperty, new DataTemplate(() => new ContentPresenter().Bind(ContentPresenter.ContentProperty)))
-                }.AppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Card"), GetColor("DarkCard"))
-                .AppThemeBinding(SBorder.StrokeProperty, GetColor("Border"), GetColor("DarkBorder"))
+                }.ResourceAppThemeBinding(SBorder.BackgroundColorProperty, this, C.Card)
+                .ResourceAppThemeBinding(SBorder.StrokeProperty, this, C.Border)
                 .Bind(SBorder.PaddingProperty, nameof(SCard.Padding), source: RelativeBindingSource.TemplatedParent);
             })));
 
@@ -111,12 +149,12 @@ public partial class StyleResource : ResourceDictionary
                 (Label.LineHeightProperty, 1),
                 (Label.CharacterSpacingProperty, -0.4),
                 (Label.FontFamilyProperty, "GeistSemiBold"))
-            .AddAppThemeBinding(Label.TextColorProperty, GetColor("Primary"), GetColor("DarkPrimary"));
+            .AddResourceAppThemeBinding(Label.TextColorProperty, this, C.Primary);
 
         RegisterSelectorStyle<Label>("SCardDescription Label")
             .Add(
                 (Label.FontSizeProperty, 14))
-            .AddAppThemeBinding(Label.TextColorProperty, GetColor("MutedForeground"), GetColor("DarkMutedForeground"));
+            .AddResourceAppThemeBinding(Label.TextColorProperty, this, C.MutedForeground);
     }
 
     private void RegisterSAlertDialogStyles()
@@ -128,7 +166,7 @@ public partial class StyleResource : ResourceDictionary
         RegisterStyle(NewStyle<SAvatar>("SAvatar")
             .Add(SAvatar.BorderWidthProperty, 0)
             .Add(SAvatar.FontFamilyProperty, "Geist")
-            .AddAppThemeBinding(SAvatar.BackgroundColorProperty, GetColor("Muted"), GetColor("DarkMuted")));
+            .AddResourceAppThemeBinding(SAvatar.BackgroundColorProperty, this, C.Muted));
     }
 
     private void RegisterSBadgeStyles()
@@ -142,35 +180,35 @@ public partial class StyleResource : ResourceDictionary
             .Add(Label.FontFamilyProperty, "GeistSemiBold");
 
         RegisterStyle(NewStyle<SBadge>("SBadge-Primary")
-            .AddAppThemeBinding(SBadge.BackgroundColorProperty, GetColor("Primary"), GetColor("DarkPrimary"))
+            .AddResourceAppThemeBinding(SBadge.BackgroundColorProperty, this, C.Primary)
             .SetPointerOverVisualState((style) => style
-                .AddAppThemeBinding(SBadge.BackgroundColorProperty, GetColor("Primary80"), GetColor("DarkPrimary80"))));
+                .AddResourceAppThemeBinding(SBadge.BackgroundColorProperty, this, C.Primary80)));
 
         RegisterSelectorStyle<Label>(".Shadcn-SBadge-Primary>Label")
-            .AddAppThemeBinding(Label.TextColorProperty, GetColor("PrimaryForeground"), GetColor("DarkPrimaryForeground"));
+            .AddResourceAppThemeBinding(Label.TextColorProperty, this, C.PrimaryForeground);
 
         RegisterStyle(NewStyle<SBadge>("SBadge-Secondary")
-            .AddAppThemeBinding(SBadge.BackgroundColorProperty, GetColor("Secondary"), GetColor("DarkSecondary"))
+            .AddResourceAppThemeBinding(SBadge.BackgroundColorProperty, this, C.Secondary)
             .SetPointerOverVisualState((style) => style
-                .AddAppThemeBinding(SBadge.BackgroundColorProperty, GetColor("Secondary80"), GetColor("DarkSecondary80"))));
+                .AddResourceAppThemeBinding(SBadge.BackgroundColorProperty, this, C.Secondary80)));
 
         RegisterSelectorStyle<Label>(".Shadcn-SBadge-Secondary>Label")
-            .AddAppThemeBinding(Label.TextColorProperty, GetColor("SecondaryForeground"), GetColor("DarkSecondaryForeground"));
+            .AddResourceAppThemeBinding(Label.TextColorProperty, this, C.SecondaryForeground);
 
         RegisterStyle(NewStyle<SBadge>("SBadge-Destructive")
-            .AddAppThemeBinding(SBadge.BackgroundColorProperty, GetColor("Destructive"), GetColor("DarkDestructive"))
+            .AddResourceAppThemeBinding(SBadge.BackgroundColorProperty, this, C.Destructive)
             .SetPointerOverVisualState((style) => style
-                .AddAppThemeBinding(SBadge.BackgroundColorProperty, GetColor("Destructive80"), GetColor("DarkDestructive80"))));
+                .AddResourceAppThemeBinding(SBadge.BackgroundColorProperty, this, C.Destructive80)));
 
         RegisterSelectorStyle<Label>(".Shadcn-SBadge-Destructive>Label")
-            .AddAppThemeBinding(Label.TextColorProperty, GetColor("DestructiveForeground"), GetColor("DarkDestructiveForeground"));
+            .AddResourceAppThemeBinding(Label.TextColorProperty, this, C.DestructiveForeground);
 
         RegisterStyle(NewStyle<SBadge>("SBadge-Outline")
             .Add(SBadge.BackgroundColorProperty, Colors.Transparent)
-            .AddAppThemeBinding(SBadge.StrokeProperty, GetColor("Border"), GetColor("DarkBorder")));
+            .AddResourceAppThemeBinding(SBadge.StrokeProperty, this, C.Border));
 
         RegisterSelectorStyle<Label>(".Shadcn-SBadge-Outline>Label")
-            .AddAppThemeBinding(Label.TextColorProperty, GetColor("Foreground"), GetColor("DarkForeground"));
+            .AddResourceAppThemeBinding(Label.TextColorProperty, this, C.Foreground);
     }
 
     private void RegisterSButtonStyles()
@@ -183,63 +221,63 @@ public partial class StyleResource : ResourceDictionary
             .Add(SButton.FontFamilyProperty, "GeistMedium"));
 
         RegisterStyle(NewStyle<SButton>("SButton-Primary")
-            .AddAppThemeBinding(SButton.BackgroundColorProperty, GetColor("Primary"), GetColor("DarkPrimary"))
-            .AddAppThemeBinding(SButton.TextColorProperty, GetColor("PrimaryForeground"), GetColor("DarkPrimaryForeground"))
+            .AddResourceAppThemeBinding(SButton.BackgroundColorProperty, this, C.Primary)
+            .AddResourceAppThemeBinding(SButton.TextColorProperty, this, C.PrimaryForeground)
             .SetPointerOverVisualState((style) => style
-                .AddAppThemeBinding(SButton.BackgroundColorProperty, GetColor("Primary90"), GetColor("DarkPrimary90"))));
+                .AddResourceAppThemeBinding(SButton.BackgroundColorProperty, this, C.Primary90)));
 
         RegisterStyle(NewStyle<SButton>("SButton-Secondary")
-            .AddAppThemeBinding(SButton.BackgroundColorProperty, GetColor("Secondary"), GetColor("DarkSecondary"))
-            .AddAppThemeBinding(SButton.TextColorProperty, GetColor("SecondaryForeground"), GetColor("DarkSecondaryForeground"))
+            .AddResourceAppThemeBinding(SButton.BackgroundColorProperty, this, C.Secondary)
+            .AddResourceAppThemeBinding(SButton.TextColorProperty, this, C.SecondaryForeground)
             .SetPointerOverVisualState((style) => style
-                .AddAppThemeBinding(SButton.BackgroundColorProperty, GetColor("Secondary80"), GetColor("DarkSecondary80"))));
+                .AddResourceAppThemeBinding(SButton.BackgroundColorProperty, this, C.Secondary80)));
 
         RegisterStyle(NewStyle<SButton>("SButton-Destructive")
-            .AddAppThemeBinding(SButton.BackgroundColorProperty, GetColor("Destructive"), GetColor("DarkDestructive"))
-            .AddAppThemeBinding(SButton.TextColorProperty, GetColor("DestructiveForeground"), GetColor("DarkDestructiveForeground"))
+            .AddResourceAppThemeBinding(SButton.BackgroundColorProperty, this, C.Destructive)
+            .AddResourceAppThemeBinding(SButton.TextColorProperty, this, C.DestructiveForeground)
             .SetPointerOverVisualState((style) => style
-                .AddAppThemeBinding(SButton.BackgroundColorProperty, GetColor("Destructive90"), GetColor("DarkDestructive90"))));
+                .AddResourceAppThemeBinding(SButton.BackgroundColorProperty, this, C.Destructive90)));
 
         RegisterStyle(NewStyle<SButton>("SButton-Outline")
-            .AddAppThemeBinding(SButton.BackgroundColorProperty, GetColor("Background"), GetColor("DarkBackground"))
-            .AddAppThemeBinding(SButton.TextColorProperty, GetColor("Primary"), GetColor("DarkPrimary"))
+            .AddResourceAppThemeBinding(SButton.BackgroundColorProperty, this, C.Background)
+            .AddResourceAppThemeBinding(SButton.TextColorProperty, this, C.Primary)
             .SetPointerOverVisualState((style) => style
-                .AddAppThemeBinding(SButton.BackgroundColorProperty, GetColor("Accent"), GetColor("DarkAccent"))
-                .AddAppThemeBinding(SButton.TextColorProperty, GetColor("AccentForeground"), GetColor("DarkAccentForeground"))));
+                .AddResourceAppThemeBinding(SButton.BackgroundColorProperty, this, C.Accent)
+                .AddResourceAppThemeBinding(SButton.TextColorProperty, this, C.AccentForeground)));
 
         RegisterStyle(NewStyle<SButton>("SButton-Ghost")
-            .AddAppThemeBinding(SButton.BackgroundColorProperty, Colors.Transparent, Colors.Transparent)
-            .AddAppThemeBinding(SButton.TextColorProperty, GetColor("Primary"), GetColor("DarkPrimary"))
+            .Add(SButton.BackgroundColorProperty, Colors.Transparent)
+            .AddResourceAppThemeBinding(SButton.TextColorProperty, this, C.Primary)
             .Add(SButton.BorderWidthProperty, 0)
             .SetPointerOverVisualState((style) => style
-                .AddAppThemeBinding(SButton.BackgroundColorProperty, GetColor("Accent"), GetColor("DarkAccent"))
-                .AddAppThemeBinding(SButton.TextColorProperty, GetColor("AccentForeground"), GetColor("DarkAccentForeground"))));
+                .AddResourceAppThemeBinding(SButton.BackgroundColorProperty, this, C.Accent)
+                .AddResourceAppThemeBinding(SButton.TextColorProperty, this, C.AccentForeground)));
     }
 
     private void RegisterSDatePickerStyles()
     {
         RegisterStyle(NewStyle<SDatePicker>("SDatePicker")
-            .AddAppThemeBinding(SDatePicker.BackgroundColorProperty, GetColor("Background"), GetColor("DarkBackground"))
+            .AddResourceAppThemeBinding(SDatePicker.BackgroundColorProperty, this, C.Background)
             .Add(
                 (CursorPointerBehavior.CursorPointerProperty, true),
                 (SDatePicker.FontFamilyProperty, "GeistRegular"))
             .SetPointerOverVisualState((style) => style
-                .AddAppThemeBinding(SDatePicker.BackgroundColorProperty, GetColor("Background90"), GetColor("DarkBackground90"))));
+                .AddResourceAppThemeBinding(SDatePicker.BackgroundColorProperty, this, C.Background90)));
     }
 
     private void RegisterSCheckboxStyles()
     {
         RegisterStyle(NewStyle<SCheckbox>(nameof(SCheckbox))
-            .AddAppThemeBinding(SCheckbox.BackgroundColorProperty, GetColor("Background"), GetColor("DarkBackground"))
-            .AddAppThemeBinding(SCheckbox.ColorProperty, GetColor("Primary"), GetColor("DarkPrimary"))
+            .AddResourceAppThemeBinding(SCheckbox.BackgroundColorProperty, this, C.Background)
+            .AddResourceAppThemeBinding(SCheckbox.ColorProperty, this, C.Primary)
             .Add(CursorPointerBehavior.CursorPointerProperty, true));
     }
 
     private void RegisterSBorderStyles()
     {
         RegisterStyle(NewStyle<SBorder>(nameof(SBorder))
-            .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Card"), GetColor("DarkCard"))
-            .AddAppThemeBinding(SBorder.StrokeProperty, GetColor("Border"), GetColor("DarkBorder"))
+            .AddResourceAppThemeBinding(SBorder.BackgroundColorProperty, this, C.Card)
+            .AddResourceAppThemeBinding(SBorder.StrokeProperty, this, C.Border)
             .Add(SBorder.CornerRadiusProperty, new CornerRadius(6)));
     }
 
@@ -247,7 +285,7 @@ public partial class StyleResource : ResourceDictionary
     {
         RegisterStyle(NewStyle<SCommandInput>("SCommandInput")
             .Add(SCommandInput.FontFamilyProperty, "GeistRegular")
-            .AddAppThemeBinding(SCommandInput.PlaceholderColorProperty, GetColor("MutedForeground"), GetColor("DarkMutedForeground")));
+            .AddResourceAppThemeBinding(SCommandInput.PlaceholderColorProperty, this, C.MutedForeground));
 
         RegisterStyle(NewStyle<FlexLayout>("SCommandInput-EntryContainer")
             .Add(FlexLayout.MarginProperty, new Thickness(10, 15, 10, 10)));
@@ -258,17 +296,17 @@ public partial class StyleResource : ResourceDictionary
 
         RegisterStyle(NewStyle<SIcon>("SCommandInput-Icon")
             .Add(SIcon.MarginProperty, new Thickness(0, 0, 2, 0))
-            .AddAppThemeBinding(SIcon.ColorProperty, GetColor("MutedForeground"), GetColor("DarkMutedForeground")));
+            .AddResourceAppThemeBinding(SIcon.ColorProperty, this, C.MutedForeground));
 
         RegisterStyle(NewStyle<SBorder>("SCommandInput-BottomBorder")
-            .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Border"), GetColor("DarkBorder"))
-            .AddAppThemeBinding(SBorder.StrokeProperty, GetColor("Border"), GetColor("DarkBorder")));
+            .AddResourceAppThemeBinding(SBorder.BackgroundColorProperty, this, C.Border)
+            .AddResourceAppThemeBinding(SBorder.StrokeProperty, this, C.Border));
 
         RegisterStyle(NewStyle<SLabel>("SCommandGroup-Heading")
             .Add(SLabel.FontFamilyProperty, "GeistMedium")
             .Add(SLabel.PaddingProperty, new Thickness(14, 10))
             .Add(SLabel.FontSizeProperty, 13)
-            .AddAppThemeBinding(SLabel.TextColorProperty, GetColor("MutedForeground"), GetColor("DarkMutedForeground")));
+            .AddResourceAppThemeBinding(SLabel.TextColorProperty, this, C.MutedForeground));
 
         RegisterStyle(NewStyle<SCommandItem>("SCommandItem")
             .Add(SCommandItem.PaddingProperty, new Thickness(14, 10)));
@@ -277,15 +315,15 @@ public partial class StyleResource : ResourceDictionary
            .BasedOn((Style)this["Shadcn-SBorder"])
            .Add(SBorder.StrokeProperty, Colors.Transparent)
            .SetPointerOverVisualState((style) => style
-                .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Accent"), GetColor("DarkAccent"))));
+                .AddResourceAppThemeBinding(SBorder.BackgroundColorProperty, this, C.Accent)));
 
         RegisterSelectorStyle<SLabel>("SCommandItem SLabel")
             .Add(SLabel.FontFamilyProperty, "GeistMedium");
 
         RegisterStyle(NewStyle<SCommandSeparator>(nameof(SCommandSeparator))
             .Add(SCommandSeparator.HeightRequestProperty, 1)
-            .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Border"), GetColor("DarkBorder"))
-            .AddAppThemeBinding(SBorder.StrokeProperty, GetColor("Border"), GetColor("DarkBorder")));
+            .AddResourceAppThemeBinding(SBorder.BackgroundColorProperty, this, C.Border)
+            .AddResourceAppThemeBinding(SBorder.StrokeProperty, this, C.Border));
     }
 
     private void RegisterSPopoverStyles()
@@ -293,23 +331,23 @@ public partial class StyleResource : ResourceDictionary
         RegisterStyle(NewStyle<SBorder>("SPopoverTriggerView")
             .Add(CursorPointerBehavior.CursorPointerProperty, true)
             .SetPointerOverVisualState((style) => style
-                .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Accent"), GetColor("DarkAccent"))));
+                .AddResourceAppThemeBinding(SBorder.BackgroundColorProperty, this, C.Accent)));
     }
 
     private void RegisterSSliderStyles()
     {
         RegisterStyle(NewStyle<SBorder>("SSlider-Track")
-            .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Secondary"), GetColor("DarkSecondary"))
+            .AddResourceAppThemeBinding(SBorder.BackgroundColorProperty, this, C.Secondary)
             .Add(SBorder.CornerRadiusProperty, 9999)
             .Add(SBorder.StrokeThicknessProperty, 0));
 
         RegisterStyle(NewStyle<SBorder>("SSlider-Range")
-            .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Primary"), GetColor("DarkPrimary"))
+            .AddResourceAppThemeBinding(SBorder.BackgroundColorProperty, this, C.Primary)
             .Add(SBorder.StrokeThicknessProperty, 0));
 
         RegisterStyle(NewStyle<SBorder>("SSlider-Thumb")
-            .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Background"), GetColor("DarkBackground"))
-            .AddAppThemeBinding(SBorder.StrokeProperty, GetColor("Primary"), GetColor("DarkPrimary"))
+            .AddResourceAppThemeBinding(SBorder.BackgroundColorProperty, this, C.Background)
+            .AddResourceAppThemeBinding(SBorder.StrokeProperty, this, C.Primary)
             .Add(SBorder.WidthRequestProperty, 25)
             .Add(SBorder.HeightRequestProperty, 25)
             .Add(SBorder.CornerRadiusProperty, 9999)
@@ -331,40 +369,40 @@ public partial class StyleResource : ResourceDictionary
             .Add(SBorder.StrokeThicknessProperty, 0)
             .Add(SBorder.StrokeProperty, Colors.Transparent)
             .SetPointerOverVisualState((style) => style
-                .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Muted"), GetColor("DarkMuted"))));
+                .AddResourceAppThemeBinding(SBorder.BackgroundColorProperty, this, C.Muted)));
 
         RegisterStyle(NewStyle<SBorder>("SToggle-Outline")
             .Add(SBorder.StrokeThicknessProperty, 1)
-            .AddAppThemeBinding(SBorder.StrokeProperty, GetColor("Input"), GetColor("DarkInput"))
+            .AddResourceAppThemeBinding(SBorder.StrokeProperty, this, C.Input)
             .SetPointerOverVisualState((style) => style
-                .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Accent"), GetColor("DarkAccent"))));
+                .AddResourceAppThemeBinding(SBorder.BackgroundColorProperty, this, C.Accent)));
 
         RegisterSelectorStyle<SBorder>(".Shadcn-SToggle:Value > .Shadcn-SToggle-Border")
-            .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Accent"), GetColor("DarkAccent"));
+            .AddResourceAppThemeBinding(SBorder.BackgroundColorProperty, this, C.Accent);
 
         RegisterSelectorStyle<SBorder>(".Shadcn-SToggle:IsPointerOver > .Shadcn-SToggle-Border")
-            .AddAppThemeBinding(SBorder.BackgroundColorProperty, GetColor("Accent"), GetColor("DarkAccent"));
+            .AddResourceAppThemeBinding(SBorder.BackgroundColorProperty, this, C.Accent);
 
         RegisterSelectorStyle<SIcon>(".Shadcn-SToggle-Border SIcon")
            .Add(SIcon.TranslationXProperty, -1)
-           .AddAppThemeBinding(SIcon.ColorProperty, GetColor("Primary"), GetColor("DarkPrimary"));
+           .AddResourceAppThemeBinding(SIcon.ColorProperty, this, C.Primary);
 
         RegisterSelectorStyle<SIcon>(".Shadcn-SToggle:Value > .Shadcn-SToggle-Border SIcon", order: 1)
-            .AddAppThemeBinding(SIcon.ColorProperty, GetColor("AccentForeground"), GetColor("DarkAccentForeground"));
+            .AddResourceAppThemeBinding(SIcon.ColorProperty, this, C.AccentForeground);
 
         RegisterSelectorStyle<SIcon>(".Shadcn-SToggle:IsPointerOver > .Shadcn-SToggle-Border SIcon")
-            .AddAppThemeBinding(SIcon.ColorProperty, GetColor("MutedForeground"), GetColor("DarkMutedForeground"));
+            .AddResourceAppThemeBinding(SIcon.ColorProperty, this, C.MutedForeground);
 
         RegisterSelectorStyle<SLabel>(".Shadcn-SToggle-Border SLabel")
            .Add(SLabel.FontFamilyProperty, "GeistMedium")
-           .AddAppThemeBinding(SLabel.TextColorProperty, GetColor("Primary"), GetColor("DarkPrimary"));
+           .AddResourceAppThemeBinding(SLabel.TextColorProperty, this, C.Primary);
 
         RegisterSelectorStyle<SLabel>(".Shadcn-SToggle:Value > .Shadcn-SToggle-Border SLabel", order: 1)
-            .AddAppThemeBinding(SLabel.TextColorProperty, GetColor("AccentForeground"), GetColor("DarkAccentForeground"));
+            .AddResourceAppThemeBinding(SLabel.TextColorProperty, this, C.AccentForeground);
 
         RegisterSelectorStyle<SLabel>(".Shadcn-SToggle:IsPointerOver > .Shadcn-SToggle-Border SLabel")
-            .AddAppThemeBinding(SLabel.TextColorProperty, GetColor("MutedForeground"), GetColor("DarkMutedForeground"));
+            .AddResourceAppThemeBinding(SLabel.TextColorProperty, this, C.MutedForeground);
 
 
     }
-}   
+}

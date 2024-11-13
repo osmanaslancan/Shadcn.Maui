@@ -2,7 +2,7 @@ using Shadcn.Maui.Core;
 
 namespace Shadcn.Maui.Controls;
 
-public class SButton : Button, IVariantStyleMapper<SButtonVariant>
+public partial class SButton : Button, IVariantStyleMapper<SButtonVariant>
 {
     public static readonly BindableProperty VariantProperty = BindableProperty.Create(
         nameof(Variant),

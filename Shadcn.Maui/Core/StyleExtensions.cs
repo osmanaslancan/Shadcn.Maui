@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Markup;
+using System.Runtime.CompilerServices;
 
 
 namespace Shadcn.Maui.Core;
@@ -57,7 +58,7 @@ public static class StyleExtensions
             new VisualStateGroup
             {
                 Name = "CommonStates",
-                States = 
+                States =
                 {
                     new VisualState
                     {
@@ -84,5 +85,11 @@ public static class StyleExtensions
         });
 
         return style;
+    }
+
+    public static Style<T> AddResourceAppThemeBinding<T>(this Style<T> style, BindableProperty property, ResourceDictionary resource, string colorName, string darkPrefix = "Dark")
+        where T : BindableObject
+    {
+        return style.AddAppThemeBinding(property, resource[colorName], resource[darkPrefix + colorName]);
     }
 }

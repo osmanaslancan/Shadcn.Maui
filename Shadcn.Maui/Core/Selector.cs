@@ -157,6 +157,13 @@ abstract class Selector
                         var propertyName = reader.ReadIdent();
                         if (propertyName == null)
                             return Invalid;
+                        if (propertyName == "has")
+                        {
+                            reader.SkipWhiteSpaces();
+                            reader.Read();
+                            reader.SkipWhiteSpaces();
+                            throw new NotImplementedException();
+                        }
 
                         setCurrentSelector(new And(), new ElementPropertyChecker(propertyName));
                     }
