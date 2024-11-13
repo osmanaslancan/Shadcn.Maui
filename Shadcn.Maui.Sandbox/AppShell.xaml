@@ -27,5 +27,6 @@
         <ShellContent Route="SContextMenuPage" Title="SContextMenu" ContentTemplate="{DataTemplate pages:SContextMenuPage}"/>
         <ShellContent Route="SSliderPage" Title="SSlider" ContentTemplate="{DataTemplate pages:SSliderPage}"/>
         <ShellContent Route="STogglePage" Title="SToggle" ContentTemplate="{DataTemplate pages:STogglePage}"/>
+        <ShellContent Route="SLabelPage" Title="SLabel" ContentTemplate="{DataTemplate pages:SLabelPage}"/>
     </TabBar>
 </Shell>

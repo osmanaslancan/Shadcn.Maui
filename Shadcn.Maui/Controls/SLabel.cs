@@ -1,10 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using Microsoft.Maui.Handlers;
-using Shadcn.Maui.Core;
 
 namespace Shadcn.Maui.Controls;
 
-public class SLabel : Label
+public partial class SLabel : Label
 {
     public static readonly BindableProperty ForProperty = BindableProperty.Create(nameof(For), typeof(View), typeof(SLabel), propertyChanging: OnForChanging, propertyChanged: OnForChanged);
 
@@ -20,7 +18,8 @@ public class SLabel : Label
 
     private static void OnForChanging(BindableObject bindable, object oldValue, object newValue)
     {
-
+        var self = (SLabel)bindable;
+        self.GestureRecognizers.Clear();
     }
 
     private static void OnForChanged(BindableObject bindable, object oldValue, object newValue)
@@ -32,10 +31,7 @@ public class SLabel : Label
         {
             Command = new RelayCommand(() =>
             {
-                if (target.Handler is ViewHandler vh)
-                {
-                    vh.ProgrammaticClick();
-                }
+                target.Focus();
             })
         });
     }
