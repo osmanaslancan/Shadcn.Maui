@@ -162,7 +162,6 @@ abstract class Selector
                             reader.SkipWhiteSpaces();
                             reader.Read();
                             reader.SkipWhiteSpaces();
-                            throw new NotImplementedException();
                         }
 
                         setCurrentSelector(new And(), new ElementPropertyChecker(propertyName));
